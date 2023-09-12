@@ -1,4 +1,4 @@
-package com.Etech.configuration;
+package com.Etech.Configuration;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
