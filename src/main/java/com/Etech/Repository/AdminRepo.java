@@ -1,11 +1,11 @@
 package com.Etech.Repository;
 
-//import com.Etech.Model.Admin;
-//import org.springframework.data.jpa.repository.JpaRepository;
-//import org.springframework.stereotype.Repository;
+import com.Etech.Model.Admin;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-//@Repository
-public interface AdminRepo {//extends JpaRepository<Admin, Long> {
+@Repository
+public interface AdminRepo extends JpaRepository<Admin, Long> {
 
     /**
      * @Author: Filmon.
