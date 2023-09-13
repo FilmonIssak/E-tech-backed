@@ -13,5 +13,7 @@ public interface AdminRepo extends JpaRepository<Admin, Long> {
      *
      */
 
+    public void deleteProduct(long id);
 
+    public void updateProductDescription(long id, String description);
 }
