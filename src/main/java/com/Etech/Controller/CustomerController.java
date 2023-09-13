@@ -4,9 +4,9 @@ import com.Etech.Model.Product;
 import com.Etech.Service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,10 +18,15 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    @ResponseStatus(HttpStatus.OK)
+
     @GetMapping("getAllProducts")
-    public List<Product> getAllProducts() {
-        return customerService.findAll();
+    public ResponseEntity<List<Product>> getAllProducts() {
+        try {
+            List<Product> products = customerService.findAll();
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }
