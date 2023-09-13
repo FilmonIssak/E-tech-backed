@@ -1,11 +1,11 @@
 package com.Etech.Repository;
 
-import org.apache.catalina.User;
+import com.Etech.Model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepo extends JpaRepository<User, Long> {
+public interface CustomerRepo extends JpaRepository<Customer, Long> {
 
 
 }

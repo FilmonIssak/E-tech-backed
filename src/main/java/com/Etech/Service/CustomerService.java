@@ -5,7 +5,7 @@ import com.Etech.Model.Product;
 
 import java.util.List;
 
-public interface UserService {
+public interface CustomerService {
 
     public List<Product> findAll();
 }

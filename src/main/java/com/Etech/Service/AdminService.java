@@ -7,17 +7,14 @@ import java.util.List;
 
 public interface AdminService {
 
-    /**
-     * @Author: Filmon.
-     * TODO: 9/12/23 Add Admin Service Methods Here
-     *
-     */
+    public void addProduct(Product product);
 
-
-
-    public void deleteProduct(long id);
-    public void updateProductDescription(long id, String description);
+    public Product findProductById(long id);
     public List<Product> findAllProduct();
+    public void deleteProduct(long id);
+    public Product updateProductDescription(long id, String description);
+    public Product updateProductPrice(long id, double price);
+
 
 
 }

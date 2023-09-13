@@ -2,6 +2,8 @@ package com.Etech.Repository;
 
 import com.Etech.Model.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -13,7 +15,9 @@ public interface AdminRepo extends JpaRepository<Admin, Long> {
      *
      */
 
-    public void deleteProduct(long id);
+//    @Query("DELETE FROM Product p WHERE p.id = :id")
+//    void deleteProduct(@Param("id") long id);
 
-    public void updateProductDescription(long id, String description);
-}
+
+    @Query("UPDATE Product p SET p.description = ?2 WHERE p.id = ?1")
+    void updateProductDescription(long productId, String description);}

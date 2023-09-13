@@ -14,46 +14,39 @@ import java.util.Optional;
 @Service
 public class AdminServiceImpl implements AdminService {
 
-
-    private AdminRepo adminRepo;
     private ProductRepo productRepo;
 
-
+    @Override
+    public void addProduct(Product product) {
+        productRepo.save(product);
+    }
 
     @Autowired
-    public AdminServiceImpl(AdminRepo adminRepo, ProductRepo productRepo) {
-        this.adminRepo = adminRepo;
+    public AdminServiceImpl(ProductRepo productRepo) {
         this.productRepo = productRepo;
     }
 
-
-
-    /**
-     * @Author: Filmon.
-     * TODO: 9/12/23 Add Admin Service Impl Methods Here
-     *
-     */
-
-
-
-
     @Override
-    public void deleteProduct(long id) {
-        adminRepo.deleteProduct(id);
+    public Product findProductById(long id) {
+        return productRepo.findById(id).get();
     }
 
     @Override
-    public void updateProductDescription(long id, String description) {
+    public Product updateProductDescription(long id, String description) {
+        var product = productRepo.findById(id);
+        Product tobeUpdate = product.orElseThrow(() -> new NoSuchElementException("Product with id " + id + " not found."));
+        tobeUpdate.setDescription(description);
+        return productRepo.save(tobeUpdate);
 
-            Optional<Product> optionalProduct = productRepo.findById(id);
+    }
 
-            if (optionalProduct.isPresent()) {
-                Product product = optionalProduct.get();
-                product.setDescription(description);
-                productRepo.save(product);
-            } else {
-                throw new NoSuchElementException("Product with id " + id + " not found.");
-        }
+    @Override
+    public Product updateProductPrice(long id, double price) {
+        var product = productRepo.findById(id);
+        Product tobeUpdate = product.orElseThrow(() -> new NoSuchElementException("Product with id " + id + " not found."));
+        tobeUpdate.setPrice(price);
+        return productRepo.save(tobeUpdate);
+
     }
 
     @Override
@@ -62,5 +55,10 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
+
+    @Override
+    public void deleteProduct(long id) {
+        productRepo.deleteById(id);
+    }
 
 }

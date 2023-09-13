@@ -1,0 +1,26 @@
+-- -- Admin Data
+-- INSERT INTO admin (first_name, last_name, email, password)
+-- VALUES ('John', 'Doe', 'john.doe@example.com', 'password123');
+-- INSERT INTO admin (first_name, last_name, email, password)
+-- VALUES ('Jane', 'Smith', 'jane.smith@example.com', 'securepassword');
+-- INSERT INTO admin (first_name, last_name, email, password)
+-- VALUES ('Alice', 'Johnson', 'alice.johnson@example.com', 'mypassword');
+--
+-- -- Customer Data
+-- -- Note: I'm omitting credit_card, addresses, and orders fields as I don't have their structures.
+-- -- The statuses here are placeholders and should be replaced by actual values from your CustomerStatus enum.
+-- INSERT INTO customer (first_name, last_name, email, password, phone, date_of_registration, customer_status)
+-- VALUES ('Tom', 'Hanks', 'tom.hanks@example.com', 'passwordTom', '123-456-7890', CURRENT_TIMESTAMP, 'ACTIVE');
+-- INSERT INTO customer (first_name, last_name, email, password, phone, date_of_registration, customer_status)
+-- VALUES ('Emma', 'Watson', 'emma.watson@example.com', 'passwordEmma', '987-654-3210', CURRENT_TIMESTAMP, 'ACTIVE');
+--
+--
+--
+-- INSERT INTO product (name, description, price, image, quantity, status, location, product_category)
+-- VALUES ('Laptop', 'A high-end gaming laptop', 1200.99, 'laptop_image_url1.jpg', '10', 'Available', 'Warehouse A', 'ELECTRONICS');
+--
+-- INSERT INTO product (name, description, price, image, quantity, status, location, product_category)
+-- VALUES ('Coffee Mug', 'A ceramic coffee mug', 9.99, 'coffee_mug_image_url2.jpg', '50', 'Available', 'Warehouse B', 'HOMEWARE');
+--
+-- INSERT INTO product (name, description, price, image, quantity, status, location, product_category)
+-- VALUES ('Running Shoes', 'Comfortable and durable running shoes', 59.99, 'running_shoes_image_url3.jpg', '25', 'Out of Stock', 'Warehouse C', 'CLOTHING');

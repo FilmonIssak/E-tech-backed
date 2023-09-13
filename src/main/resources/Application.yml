@@ -28,10 +28,12 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/e-tech
-    username: e-tech
-    password: Test123
+    username: postgres
+    password: test123
     driver-class-name: org.postgresql.Driver
   jpa:
+    hibernate:
+          ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect

@@ -2,20 +2,20 @@ package com.Etech.Service.Impl;
 
 import com.Etech.Model.Product;
 import com.Etech.Repository.ProductRepo;
-import com.Etech.Repository.UserRepo;
-import com.Etech.Service.UserService;
+import com.Etech.Repository.CustomerRepo;
+import com.Etech.Service.CustomerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class CustomerServiceImpl implements CustomerService {
 
-    private UserRepo userRepo;
+    private CustomerRepo customerRepo;
     private ProductRepo productRepo;
 
-    public UserServiceImpl(UserRepo userRepo, ProductRepo productRepo) {
-        this.userRepo = userRepo;
+    public CustomerServiceImpl(CustomerRepo customerRepo, ProductRepo productRepo) {
+        this.customerRepo = customerRepo;
         this.productRepo = productRepo;
     }
 

@@ -1,1 +1,28 @@
 services:
+  postgres:
+    container_name: postgres-spring-data
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test123
+      POSTGRES_DB: e-tech
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: your-email@example.com
+      PGADMIN_DEFAULT_PASSWORD: your-password
+    ports:
+      - "8090:80"
+    restart: unless-stopped
+
+volumes:
+  postgres:
+  pgadmin:

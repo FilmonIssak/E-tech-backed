@@ -17,14 +17,14 @@ public class Product {
     private Long id;
     private String name;
     private String description;
-    private Double price;
-    private String image;
+    private double price;
+//    private String image;
     private String quantity;
-    private String status;
-    private String location;
+//    private String status;
+//    private String location;
 
-    @Enumerated
-    private ProductCategory productCategory;
+//    @Enumerated
+//    private ProductCategory productCategory;
 
 
 
