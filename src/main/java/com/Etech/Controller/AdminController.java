@@ -3,7 +3,6 @@ package com.Etech.Controller;
 import com.Etech.Model.Product;
 import com.Etech.Service.AdminService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,25 +16,41 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("addProduct")
-    public void addProduct(@RequestBody Product product) {
-        adminService.addProduct(product);
+    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+        try {
+            adminService.addProduct(product);
+            return new ResponseEntity<>(product, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("getProduct/{id}")
-    public Product findProductById(@PathVariable("id") long id) {
-        return adminService.findProductById(id);
+
+
+    @GetMapping("getProductById/{id}")
+    public ResponseEntity<Product> findProductById(@PathVariable("id") long id) {
+        try {
+            Product product = adminService.findProductById(id);
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @ResponseStatus(HttpStatus.OK)
+
     @GetMapping("getAllProducts")
-    public List<Product> getAllProducts() {
-        return adminService.findAllProduct();
+    public ResponseEntity<List<Product>> getAllProducts() {
+        try {
+            List<Product> products = adminService.findAllProduct();
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @PutMapping("updateDescription/{id}")
+
+    @PutMapping("updateProductDescription/{id}")
     public ResponseEntity<Product> updateProductDescription(@PathVariable long id, @RequestHeader String description) {
         try {
             adminService.updateProductDescription(id, description);
@@ -45,7 +60,7 @@ public class AdminController {
         }
     }
 
-    @PutMapping("updatePrice/{id}")
+    @PutMapping("updateProductPrice/{id}")
     public ResponseEntity<Product> updatePrice(@PathVariable long id, @RequestHeader double price) {
         try {
             Product product = adminService.updateProductPrice(id, price);
@@ -57,12 +72,15 @@ public class AdminController {
 
 
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("delete/{id}")
-    public void deleteProductById(@PathVariable long id) {
-        adminService.deleteProduct(id);
+    @DeleteMapping("deleteProduct/{id}")
+    public ResponseEntity<Product> deleteProduct(@PathVariable long id) {
+        try {
+            adminService.deleteProduct(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
-
 
 
 }

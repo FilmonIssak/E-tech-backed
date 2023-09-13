@@ -23,8 +23,8 @@ public class Product {
 //    private String status;
 //    private String location;
 
-//    @Enumerated
-//    private ProductCategory productCategory;
+    @Enumerated
+    private ProductCategory productCategory;
 
 
 
