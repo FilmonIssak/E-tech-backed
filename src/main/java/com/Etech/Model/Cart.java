@@ -5,26 +5,33 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Address {
+public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String street;
-    private String city;
-    private String state;
-    private String zipCode;
+    private int quantity;
+    private double totalPrice;
 
-    @ManyToOne
+    @OneToMany
+    private List<Product> products;
+
+    @OneToOne
     private Customer customer;
 
-    @ManyToOne
-    private Admin admin;
+
+    public void addProduct(Product product){
+        products.add(product);
+    }
+
+//    @OneToMany
+//    private List<OrderDto> orders;
+
 
 }
-

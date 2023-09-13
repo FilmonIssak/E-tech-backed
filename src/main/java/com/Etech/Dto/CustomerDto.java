@@ -1,42 +1,32 @@
-package com.Etech.Model;
+package com.Etech.Dto;
 
-import com.Etech.Model.enums.CustomerStatus;
+import com.Etech.Model.Address;
+import com.Etech.Model.CreditCard;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Customer {
+public class CustomerDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
     private String lastName;
-    @Column(unique = true)
     private String email;
     private String password;
     private String phone;
-    private LocalDateTime dateOfRegistration;
 
-    @Enumerated
-    private CustomerStatus customerStatus;
 
-    @Embedded
     private CreditCard creditCard;
 
-    @OneToMany
     private List<Address> addresses;
 
-    @OneToMany
-    private List<Order> orders;
+    private List<OrderDto> orders;
 
 
 }

@@ -12,4 +12,6 @@ public interface AdminRepo extends JpaRepository<Admin, Long> {
      * TODO: 9/12/23 Add Admin Repo Methods Here
      *
      */
+
+
 }

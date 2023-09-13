@@ -1,6 +1,8 @@
-package com.Etech.Model;
+package com.Etech.Dto;
 
 
+import com.Etech.Model.Address;
+import com.Etech.Model.Cart;
 import com.Etech.Model.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,21 +12,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Order {
+public class OrderDto {
 
-    @Id
-    @GeneratedValue
     private Long id;
     private String orderNumber;
     private String orderDate;
     private String orderTime;
     private String orderTotal;
 
-    @Enumerated
     private OrderStatus orderStatus;
 
-    @ManyToOne
     private Address address;
 
     /**
@@ -34,24 +31,9 @@ public class Order {
      * We have to create a payment class
      */
 
-
-    @OneToOne
     private Cart cart;
 
-    @ManyToOne
-    private Customer customer;
-
-//    private String orderSubtotal;
-//    private String orderTax;
-//    private String orderShipping;
-//    private String orderDiscount;
-//    private String orderPaymentMethod;
-//    private String orderPaymentStatus;
-//    private String orderShippingMethod;
-//    private String orderShippingStatus;
-//    private String orderShippingAddress;
-//    private String orderBillingAddress;
-
+    private CustomerDto customer;
 
 
 }
