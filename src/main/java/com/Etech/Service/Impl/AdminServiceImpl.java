@@ -14,16 +14,13 @@ import java.util.Optional;
 @Service
 public class AdminServiceImpl implements AdminService {
 
+    @Autowired
     private ProductRepo productRepo;
+
 
     @Override
     public void addProduct(Product product) {
         productRepo.save(product);
-    }
-
-    @Autowired
-    public AdminServiceImpl(ProductRepo productRepo) {
-        this.productRepo = productRepo;
     }
 
     @Override

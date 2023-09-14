@@ -4,6 +4,7 @@ import com.Etech.Model.Product;
 import com.Etech.Repository.ProductRepo;
 import com.Etech.Repository.CustomerRepo;
 import com.Etech.Service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,13 +12,10 @@ import java.util.List;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    private CustomerRepo customerRepo;
+    @Autowired
     private ProductRepo productRepo;
 
-    public CustomerServiceImpl(CustomerRepo customerRepo, ProductRepo productRepo) {
-        this.customerRepo = customerRepo;
-        this.productRepo = productRepo;
-    }
+
 
 
     @Override
