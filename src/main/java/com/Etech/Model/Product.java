@@ -18,13 +18,13 @@ public class Product {
     private String name;
     private String description;
     private double price;
-//    private String image;
+    private String image;
     private String quantity;
-//    private String status;
+    private String status;
 //    private String location;
 
-//    @Enumerated
-//    private ProductCategory productCategory;
+    @Enumerated
+    private ProductCategory productCategory;
 
 
 

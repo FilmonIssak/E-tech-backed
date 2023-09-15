@@ -17,6 +17,7 @@ public class AdminController {
     private  AdminService adminService;
 
     @PostMapping("addProduct")
+
     public ResponseEntity<?> addProduct(@RequestBody ProductDto productDto) {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.addProduct(productDto));
     }
@@ -45,6 +46,7 @@ public class AdminController {
     public ResponseEntity<?> deleteProduct(@PathVariable long id) {
         adminService.deleteProduct(id);
         return ResponseEntity.status(HttpStatus.OK).body("Product to be deleted not present");
+
     }
 
 

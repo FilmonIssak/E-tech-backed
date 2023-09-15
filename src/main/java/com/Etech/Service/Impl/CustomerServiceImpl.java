@@ -23,7 +23,6 @@ public class CustomerServiceImpl implements CustomerService {
     private ModelMapper modelMapper;
 
 
-
     @Override
     public List<ProductDto> findAll() {
         List<Product> productList = productRepo.findAll();
