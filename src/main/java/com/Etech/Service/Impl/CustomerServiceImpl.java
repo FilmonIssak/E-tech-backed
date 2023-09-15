@@ -1,8 +1,8 @@
 package com.Etech.Service.Impl;
 
 import com.Etech.Model.Product;
-import com.Etech.Repository.ProductRepo;
 import com.Etech.Repository.CustomerRepo;
+import com.Etech.Repository.ProductRepo;
 import com.Etech.Service.CustomerService;
 import org.springframework.stereotype.Service;
 
