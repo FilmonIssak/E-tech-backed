@@ -1,64 +1,86 @@
 package com.Etech.Service.Impl;
 
+import com.Etech.Dto.ProductDto;
+import com.Etech.Exception.ResourceException;
 import com.Etech.Model.Product;
-import com.Etech.Repository.AdminRepo;
 import com.Etech.Repository.ProductRepo;
 import com.Etech.Service.AdminService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class AdminServiceImpl implements AdminService {
 
+    @Autowired
     private ProductRepo productRepo;
 
-    @Override
-    public void addProduct(Product product) {
-        productRepo.save(product);
-    }
 
     @Autowired
-    public AdminServiceImpl(ProductRepo productRepo) {
-        this.productRepo = productRepo;
+    ModelMapper modelMapper;
+
+
+    @Override
+    public ProductDto addProduct(ProductDto productDto) {
+
+        Optional<Product> toBeAdded = productRepo.findById(productDto.getId());
+        if(toBeAdded.isPresent()){
+            throw new ResourceException("product already present: ", HttpStatus.CONFLICT);
+        }
+        Product product = modelMapper.map(productDto, Product.class);
+        Product nowProduct = productRepo.save(product);
+        return modelMapper.map(nowProduct, ProductDto.class);
+
     }
 
     @Override
-    public Product findProductById(long id) {
-        return productRepo.findById(id).get();
+    public ProductDto findProductById(long id) {
+        Product product = productRepo.findById(id).orElseThrow(() -> new ResourceException("product with id: "+ id + "is already present"));
+        return modelMapper.map(product, ProductDto.class);
     }
 
     @Override
-    public Product updateProductDescription(long id, String description) {
+    public ProductDto updateProductDescription(long id, String description) {
         var product = productRepo.findById(id);
-        Product tobeUpdate = product.orElseThrow(() -> new NoSuchElementException("Product with id " + id + " not found."));
+        Product tobeUpdate = product.orElseThrow(() -> new ResourceException("Product with id " + id + " not found."));
         tobeUpdate.setDescription(description);
-        return productRepo.save(tobeUpdate);
+        productRepo.save(tobeUpdate);
+        return modelMapper.map(tobeUpdate,ProductDto.class);
 
     }
 
     @Override
-    public Product updateProductPrice(long id, double price) {
+    public ProductDto updateProductPrice(long id, double price) {
         var product = productRepo.findById(id);
         Product tobeUpdate = product.orElseThrow(() -> new NoSuchElementException("Product with id " + id + " not found."));
         tobeUpdate.setPrice(price);
-        return productRepo.save(tobeUpdate);
+         productRepo.save(tobeUpdate);
+        return modelMapper.map(tobeUpdate, ProductDto.class);
 
     }
 
     @Override
-    public List<Product> findAllProduct() {
-        return productRepo.findAll();
+    public List<ProductDto> findAllProduct() {
+
+        List<Product> productList = productRepo.findAll();
+        return productList.stream().map(product -> modelMapper.map(product,ProductDto.class)).collect(Collectors.toList());
     }
 
 
 
     @Override
     public void deleteProduct(long id) {
-        productRepo.deleteById(id);
+
+        Product toBeDeleted = productRepo.findById(id).orElseThrow(() -> new ResourceException("product to be deleted not found"));
+        productRepo.delete(toBeDeleted);
     }
 
 }
