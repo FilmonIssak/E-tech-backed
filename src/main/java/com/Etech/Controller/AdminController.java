@@ -16,6 +16,10 @@ public class AdminController {
     @Autowired
     private  AdminService adminService;
 
+    @GetMapping("/test")
+    public String Test(){
+        return "test";
+    }
     @PostMapping("addProduct")
 
     public ResponseEntity<?> addProduct(@RequestBody ProductDto productDto) {
