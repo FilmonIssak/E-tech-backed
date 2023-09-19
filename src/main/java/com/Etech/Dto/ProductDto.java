@@ -1,5 +1,6 @@
 package com.Etech.Dto;
 
+import com.Etech.Model.enums.ProductCategory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +19,6 @@ public class ProductDto {
    private String quantity;
 //    private String status;
 //    private String location;
+private ProductCategory productCategory;
 
 }
