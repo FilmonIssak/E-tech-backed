@@ -12,11 +12,11 @@ public class ProductDto {
     private Long id;
     private String name;
     private String description;
-    private String price;
-    private String image;
-    private String category;
-    private String quantity;
-    private String status;
-    private String location;
+    private double price;
+//    private String image;
+//    private String category;
+   private String quantity;
+//    private String status;
+//    private String location;
 
 }

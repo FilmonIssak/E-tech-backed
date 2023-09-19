@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/customer")
+@RequestMapping("/api/v1/customer/products")
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
   
 
-    @GetMapping("getAllProducts")
+    @GetMapping
     public ResponseEntity<?> getAllProducts() {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll());
     }

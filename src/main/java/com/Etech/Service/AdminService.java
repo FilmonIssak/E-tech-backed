@@ -13,8 +13,8 @@ public interface AdminService {
     public ProductDto findProductById(long id);
     public List<ProductDto> findAllProduct();
     public void deleteProduct(long id);
-    public ProductDto updateProductDescription(long id, String description);
-    public ProductDto updateProductPrice(long id, double price);
+    public ProductDto updateProductDescription(long id, ProductDto productDto);
+    public ProductDto updateProductPrice(long id, ProductDto productDto);
 
 
 
