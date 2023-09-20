@@ -1,8 +1,6 @@
 package com.Etech.Service;
 
 import com.Etech.Dto.ProductDto;
-import com.Etech.Model.Product;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -16,6 +14,7 @@ public interface AdminService {
     public ProductDto updateProductDescription(long id, ProductDto productDto);
     public ProductDto updateProductPrice(long id, ProductDto productDto);
     public ProductDto updateProductCategory(long id, ProductDto productDto);
+    public ProductDto updateProductStatus(long id, ProductDto productDto);
 
 
 

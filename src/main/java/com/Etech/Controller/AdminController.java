@@ -44,6 +44,10 @@ public class AdminController {
     public ResponseEntity<?> updateCatagory(@PathVariable long id, @RequestBody ProductDto productDto) {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProductCategory(id, productDto));
     }
+    @PatchMapping("products/status/{id}")
+    public ResponseEntity<?> updateStatus(@PathVariable long id, @RequestBody ProductDto productDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProductStatus(id, productDto));
+    }
 
     @DeleteMapping("products/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable long id) {

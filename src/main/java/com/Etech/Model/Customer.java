@@ -1,11 +1,11 @@
 package com.Etech.Model;
 
 import com.Etech.Model.enums.CustomerStatus;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +28,9 @@ public class Customer {
 
     @Enumerated
     private CustomerStatus customerStatus;
+
+//    @OneToOne
+//    private Role role;
 
     @Embedded
     private CreditCard creditCard;

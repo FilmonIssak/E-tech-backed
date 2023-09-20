@@ -1,10 +1,12 @@
 package com.Etech.Model;
 
 import com.Etech.Model.enums.ProductCategory;
-import jakarta.persistence.*;
+import com.Etech.Model.enums.ProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -21,13 +23,10 @@ public class Product {
     private int quantity;
 
     //    private String image;
-//    private String status;
-//    private String location;
+
+    @Enumerated(EnumType.STRING)
+    private ProductStatus productStatus;
 
     @Enumerated(EnumType.STRING)
     private ProductCategory productCategory;
-
-
-
-
 }

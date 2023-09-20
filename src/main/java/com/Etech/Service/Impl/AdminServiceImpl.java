@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -73,6 +72,14 @@ public class AdminServiceImpl implements AdminService {
         productRepo.save(toBeUpdated);
         return modelMapper.map(toBeUpdated, ProductDto.class);
 
+    }
+
+    @Override
+    public ProductDto updateProductStatus(long id, ProductDto productDto) {
+        Product toBeUpdated = productRepo.findProductById(id).orElseThrow(() -> new ResourceException("Product with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
+        toBeUpdated.setProductStatus(productDto.getProductStatus());
+        productRepo.save(toBeUpdated);
+        return modelMapper.map(toBeUpdated, ProductDto.class);
     }
 
     @Override
