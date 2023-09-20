@@ -15,6 +15,7 @@ public interface AdminService {
     public void deleteProduct(long id);
     public ProductDto updateProductDescription(long id, ProductDto productDto);
     public ProductDto updateProductPrice(long id, ProductDto productDto);
+    public ProductDto updateProductCategory(long id, ProductDto productDto);
 
 
 

@@ -66,6 +66,14 @@ public class AdminServiceImpl implements AdminService {
         return modelMapper.map(toBeUpdated, ProductDto.class);
 
     }
+    @Override
+    public ProductDto updateProductCategory(long id, ProductDto productDto) {
+        Product toBeUpdated = productRepo.findProductById(id).orElseThrow(() -> new ResourceException("Product with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
+        toBeUpdated.setProductCategory(productDto.getProductCategory());
+        productRepo.save(toBeUpdated);
+        return modelMapper.map(toBeUpdated, ProductDto.class);
+
+    }
 
     @Override
     public List<ProductDto> findAllProduct() {

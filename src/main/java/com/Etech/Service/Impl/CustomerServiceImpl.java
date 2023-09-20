@@ -2,6 +2,7 @@ package com.Etech.Service.Impl;
 
 import com.Etech.Dto.ProductDto;
 import com.Etech.Model.Product;
+import com.Etech.Model.enums.ProductCategory;
 import com.Etech.Repository.CustomerRepo;
 import com.Etech.Repository.ProductRepo;
 import com.Etech.Service.CustomerService;
@@ -19,6 +20,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private ProductRepo productRepo;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -28,4 +30,5 @@ public class CustomerServiceImpl implements CustomerService {
         List<Product> productList = productRepo.findAll();
         return productList.stream().map(product -> modelMapper.map(product,ProductDto.class)).collect(Collectors.toList());
     }
+
 }
