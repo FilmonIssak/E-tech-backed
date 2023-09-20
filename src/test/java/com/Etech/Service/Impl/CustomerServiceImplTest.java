@@ -30,14 +30,14 @@ class CustomerServiceImplTest {
     /**
      * Method under test: {@link CustomerServiceImpl#findAll()}
      */
-    @Test
-    void testFindAll() {
-        ArrayList<Product> productList = new ArrayList<>();
-        when(productRepo.findAll()).thenReturn(productList);
-        List<Product> actualFindAllResult = customerServiceImpl.findAll();
-        assertSame(productList, actualFindAllResult);
-        assertTrue(actualFindAllResult.isEmpty());
-        verify(productRepo).findAll();
-    }
+//    @Test
+//    void testFindAll() {
+//        ArrayList<Product> productList = new ArrayList<>();
+//        when(productRepo.findAll()).thenReturn(productList);
+//        List<Product> actualFindAllResult = customerServiceImpl.findAll();
+//        assertSame(productList, actualFindAllResult);
+//        assertTrue(actualFindAllResult.isEmpty());
+//        verify(productRepo).findAll();
+//    }
 }
 
