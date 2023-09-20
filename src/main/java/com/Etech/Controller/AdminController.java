@@ -30,6 +30,10 @@ public class AdminController {
     public ResponseEntity<List<?>> getAllProducts() {
        return ResponseEntity.status(HttpStatus.OK).body(adminService.findAllProduct());
     }
+    @PutMapping("products/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable long id, @RequestBody ProductDto productDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProduct(id,productDto));
+    }
 
     @PatchMapping("products/description/{id}")
     public ResponseEntity<?> updateProductDescription(@PathVariable long id, @RequestBody ProductDto productDto) {

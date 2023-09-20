@@ -49,6 +49,18 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public ProductDto updateProduct(long id, ProductDto productDto) {
+        Product toBeUpdated = productRepo.findProductById(id).orElseThrow(() -> new ResourceException("Product with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
+        toBeUpdated.setName(productDto.getName());
+        toBeUpdated.setQuantity(productDto.getQuantity());
+        toBeUpdated.setPrice(productDto.getPrice());
+        toBeUpdated.setDescription(productDto.getDescription());
+        toBeUpdated.setProductStatus(productDto.getProductStatus());
+        toBeUpdated.setProductCategory(productDto.getProductCategory());
+        productRepo.save(toBeUpdated);
+        return modelMapper.map(toBeUpdated, ProductDto.class);
+    }
+    @Override
     public ProductDto updateProductDescription(long id, ProductDto productDto) {
         Product toBeUpdated = productRepo.findProductById(id).orElseThrow(() -> new ResourceException("Product with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
         toBeUpdated.setDescription(productDto.getDescription());
@@ -97,5 +109,6 @@ public class AdminServiceImpl implements AdminService {
         Product toBeDeleted = productRepo.findProductById(id).orElseThrow(() -> new ResourceException("Product to be deleted not found"));
         productRepo.delete(toBeDeleted);
     }
+
 
 }
