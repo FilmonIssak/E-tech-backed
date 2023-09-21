@@ -31,3 +31,16 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignore Application properties and YML configuration files
+src/main/resources/application.properties
+src/main/resources/Application.yml
+src/main/resources/application.yml
+src/main/resources/data.sql
+
+
+# Ignore DS_Store from MacOs
+.DS_Store
+src/main/.DS_Store
+src/main/java/com/Etech/.DS_Store
+
