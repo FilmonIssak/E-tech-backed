@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/admin")
+@RequestMapping("/api/v1/admin/")
 public class AdminController {
 
     @Autowired
     private  AdminService adminService;
 
-    @PostMapping("/products")
+    @PostMapping("products")
     public ResponseEntity<?> addProduct(@RequestBody ProductDto productDto) {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.addProduct(productDto));
     }

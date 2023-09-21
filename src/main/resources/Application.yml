@@ -20,20 +20,20 @@
 #      mode: always
 #server:
 #  port: 8080
-#
-#
 
 
-#spring:
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/e-tech
-#    username: postgres
-#    password: test123
-#    driver-class-name: org.postgresql.Driver
-#  jpa:
-#    hibernate:
-#          ddl-auto: update
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/e-tech
+    username: postgres
+    password: test123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+          ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
