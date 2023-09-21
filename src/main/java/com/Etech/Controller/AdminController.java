@@ -16,37 +16,47 @@ public class AdminController {
     @Autowired
     private  AdminService adminService;
 
-    @PostMapping("addProduct")
-
+    @PostMapping("/products")
     public ResponseEntity<?> addProduct(@RequestBody ProductDto productDto) {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.addProduct(productDto));
     }
 
-    @GetMapping("getProductById/{id}")
+    @GetMapping("products/{id}")
     public ResponseEntity<?> findProductById(@PathVariable("id") long id) {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.findProductById(id));
     }
 
-    @GetMapping("getAllProducts")
+    @GetMapping("products")
     public ResponseEntity<List<?>> getAllProducts() {
        return ResponseEntity.status(HttpStatus.OK).body(adminService.findAllProduct());
     }
-
-    @PutMapping("updateProductDescription/{id}")
-    public ResponseEntity<?> updateProductDescription(@PathVariable long id, @RequestHeader String description) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProductDescription(id,description));
+    @PutMapping("products/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable long id, @RequestBody ProductDto productDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProduct(id,productDto));
     }
 
-    @PutMapping("updateProductPrice/{id}")
-    public ResponseEntity<?> updatePrice(@PathVariable long id, @RequestHeader double price) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProductPrice(id, price));
+    @PatchMapping("products/description/{id}")
+    public ResponseEntity<?> updateProductDescription(@PathVariable long id, @RequestBody ProductDto productDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProductDescription(id,productDto));
     }
 
-    @DeleteMapping("deleteProduct/{id}")
+    @PatchMapping("products/price/{id}")
+    public ResponseEntity<?> updatePrice(@PathVariable long id, @RequestBody ProductDto productDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProductPrice(id, productDto));
+    }
+    @PatchMapping("products/category/{id}")
+    public ResponseEntity<?> updateCatagory(@PathVariable long id, @RequestBody ProductDto productDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProductCategory(id, productDto));
+    }
+    @PatchMapping("products/status/{id}")
+    public ResponseEntity<?> updateStatus(@PathVariable long id, @RequestBody ProductDto productDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProductStatus(id, productDto));
+    }
+
+    @DeleteMapping("products/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable long id) {
         adminService.deleteProduct(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Product to be deleted not present");
-
+        return ResponseEntity.status(HttpStatus.OK).body("Product Successfully deleted");
     }
 
 

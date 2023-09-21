@@ -15,9 +15,8 @@ import java.util.List;
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
-  
 
-    @GetMapping("getAllProducts")
+    @GetMapping("/products")
     public ResponseEntity<?> getAllProducts() {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll());
     }
