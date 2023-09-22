@@ -4,7 +4,6 @@ package com.Etech.Dto;
 import com.Etech.Model.Address;
 import com.Etech.Model.Cart;
 import com.Etech.Model.enums.OrderStatus;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

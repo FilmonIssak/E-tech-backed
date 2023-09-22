@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,48 +22,76 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private ProductRepo productRepo;
 
-
     @Autowired
     ModelMapper modelMapper;
 
 
     @Override
     public ProductDto addProduct(ProductDto productDto) {
+        Long productId = productDto.getId();
 
-        Optional<Product> toBeAdded = productRepo.findById(productDto.getId());
-        if(toBeAdded.isPresent()){
-            throw new ResourceException("product already present: ", HttpStatus.CONFLICT);
+        if (productId != null) {
+            Optional<Product> toBeAdded = productRepo.findProductById(productId);
+
+            if (toBeAdded.isPresent()) {
+                throw new ResourceException("Product with ID " + productDto.getId() + " already exists", HttpStatus.CONFLICT);
+            }
         }
         Product product = modelMapper.map(productDto, Product.class);
-        Product nowProduct = productRepo.save(product);
-        return modelMapper.map(nowProduct, ProductDto.class);
-
-    }
-
-    @Override
-    public ProductDto findProductById(long id) {
-        Product product = productRepo.findById(id).orElseThrow(() -> new ResourceException("product with id: "+ id + "is already present"));
+        productRepo.save(product);
         return modelMapper.map(product, ProductDto.class);
     }
 
     @Override
-    public ProductDto updateProductDescription(long id, String description) {
-        var product = productRepo.findById(id);
-        Product tobeUpdate = product.orElseThrow(() -> new ResourceException("Product with id " + id + " not found."));
-        tobeUpdate.setDescription(description);
-        productRepo.save(tobeUpdate);
-        return modelMapper.map(tobeUpdate,ProductDto.class);
+    public ProductDto findProductById(long id) {
+        Product product = productRepo.findProductById(id).orElseThrow(() -> new ResourceException("Product with id: "+ id + " is not present"));
+        return modelMapper.map(product, ProductDto.class);
+    }
+
+    @Override
+    public ProductDto updateProduct(long id, ProductDto productDto) {
+        Product toBeUpdated = productRepo.findProductById(id).orElseThrow(() -> new ResourceException("Product with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
+        toBeUpdated.setName(productDto.getName());
+        toBeUpdated.setQuantity(productDto.getQuantity());
+        toBeUpdated.setPrice(productDto.getPrice());
+        toBeUpdated.setDescription(productDto.getDescription());
+        toBeUpdated.setProductStatus(productDto.getProductStatus());
+        toBeUpdated.setProductCategory(productDto.getProductCategory());
+        productRepo.save(toBeUpdated);
+        return modelMapper.map(toBeUpdated, ProductDto.class);
+    }
+    @Override
+    public ProductDto updateProductDescription(long id, ProductDto productDto) {
+        Product toBeUpdated = productRepo.findProductById(id).orElseThrow(() -> new ResourceException("Product with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
+        toBeUpdated.setDescription(productDto.getDescription());
+        productRepo.save(toBeUpdated);
+        return modelMapper.map(toBeUpdated, ProductDto.class);
 
     }
 
     @Override
-    public ProductDto updateProductPrice(long id, double price) {
-        var product = productRepo.findById(id);
-        Product tobeUpdate = product.orElseThrow(() -> new NoSuchElementException("Product with id " + id + " not found."));
-        tobeUpdate.setPrice(price);
-         productRepo.save(tobeUpdate);
-        return modelMapper.map(tobeUpdate, ProductDto.class);
+    public ProductDto updateProductPrice(long id, ProductDto productDto) {
+        Product toBeUpdated = productRepo.findProductById(id).orElseThrow(() -> new ResourceException("Product with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
+        toBeUpdated.setPrice(productDto.getPrice());
+        productRepo.save(toBeUpdated);
+        return modelMapper.map(toBeUpdated, ProductDto.class);
 
+    }
+    @Override
+    public ProductDto updateProductCategory(long id, ProductDto productDto) {
+        Product toBeUpdated = productRepo.findProductById(id).orElseThrow(() -> new ResourceException("Product with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
+        toBeUpdated.setProductCategory(productDto.getProductCategory());
+        productRepo.save(toBeUpdated);
+        return modelMapper.map(toBeUpdated, ProductDto.class);
+
+    }
+
+    @Override
+    public ProductDto updateProductStatus(long id, ProductDto productDto) {
+        Product toBeUpdated = productRepo.findProductById(id).orElseThrow(() -> new ResourceException("Product with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
+        toBeUpdated.setProductStatus(productDto.getProductStatus());
+        productRepo.save(toBeUpdated);
+        return modelMapper.map(toBeUpdated, ProductDto.class);
     }
 
     @Override
@@ -79,8 +106,9 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void deleteProduct(long id) {
 
-        Product toBeDeleted = productRepo.findById(id).orElseThrow(() -> new ResourceException("product to be deleted not found"));
+        Product toBeDeleted = productRepo.findProductById(id).orElseThrow(() -> new ResourceException("Product to be deleted not found"));
         productRepo.delete(toBeDeleted);
     }
+
 
 }
