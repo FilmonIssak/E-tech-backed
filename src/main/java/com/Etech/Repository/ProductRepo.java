@@ -1,6 +1,7 @@
 package com.Etech.Repository;
 
 import com.Etech.Model.Product;
+import com.Etech.Model.enums.ProductCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +13,9 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
 
     Optional<Product> findProductById(long id);
 
-   // List<Product> findProductsByCategory(@Param("") ProductCategory productCategory);
+    List<Product> findByNameContainingIgnoreCase(String name);
 
-    // List<Product> findProductsWithStatus(@Param("") ProductStatus productStatus);
+    List<Product> findByProductCategory(ProductCategory category);
+
+
 }
