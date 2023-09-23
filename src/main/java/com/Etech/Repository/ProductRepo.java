@@ -16,6 +16,7 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
 
     Optional<Product> findProductById(long id);
 
+
 //    @Query("SELECT p FROM Product p WHERE p.name= : name")
       Optional<Product> getProductByName(@Param ("name") String name);
 //      @Query("SELECT p FROM Product p WHERE p.productCategory= : catagory")
@@ -27,6 +28,13 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
     List<Product> findAllByKeyWord(@Param("keyWord") String keyWord);
 
     // List<Product> findProductsWithStatus(@Param("") ProductStatus productStatus);
+
+
+
+
+    List<Product> findByNameContainingIgnoreCase(String name);
+
+    List<Product> findByProductCategory(ProductCategory category);
 
 
 
