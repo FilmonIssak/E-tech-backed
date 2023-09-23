@@ -26,7 +26,7 @@ public class Customer {
     private String phone;
     private LocalDateTime dateOfRegistration;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private CustomerStatus customerStatus;
 
 //    @OneToOne
