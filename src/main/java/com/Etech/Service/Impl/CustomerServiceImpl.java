@@ -31,12 +31,5 @@ public class CustomerServiceImpl implements CustomerService {
         return productList.stream().map(product -> modelMapper.map(product,ProductDto.class)).collect(Collectors.toList());
     }
 
-    @Override
-    public ProductDto updateProductQuantity(long id, ProductDto productDto) {
-        Product toBeUpdated = productRepo.findProductById(id).orElseThrow(() -> new ResourceException("Product with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
-        toBeUpdated.setQuantity(productDto.getQuantity());
-        productRepo.save(toBeUpdated);
-        return modelMapper.map(toBeUpdated, ProductDto.class);
-    }
 
 }
