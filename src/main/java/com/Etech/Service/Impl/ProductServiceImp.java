@@ -28,7 +28,7 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public ProductDto findProductByName(String name) {
-        var product = productRepo.getProductByName (name).orElseThrow ( () -> new ResourceException("Product with the Name : "+ name + " is not present"));
+        Product product = productRepo.getProductByName (name).orElseThrow ( () -> new ResourceException("Product with the Name : "+ name + " is not present"));
         return modelMapper.map (  product,ProductDto.class);
     }
 

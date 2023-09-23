@@ -8,5 +8,5 @@ import java.util.List;
 public interface CustomerService {
 
     public List<ProductDto> findAll();
-    public ProductDto updateProductQuantity(long id, ProductDto productDto);
+
 }
