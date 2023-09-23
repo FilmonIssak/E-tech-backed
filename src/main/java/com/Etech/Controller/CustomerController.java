@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/customer/")
 public class CustomerController {
+
     @Autowired
     private CustomerService customerService;
 
@@ -18,9 +19,5 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll());
     }
 
-    @PutMapping("products/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable long id, @RequestBody ProductDto productDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(customerService.updateProductQuantity(id,productDto));
-    }
 
 }

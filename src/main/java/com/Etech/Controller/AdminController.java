@@ -45,7 +45,7 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProductPrice(id, productDto));
     }
     @PatchMapping("products/category/{id}")
-    public ResponseEntity<?> updateCatagory(@PathVariable long id, @RequestBody ProductDto productDto) {
+    public ResponseEntity<?> updateCategory(@PathVariable long id, @RequestBody ProductDto productDto) {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProductCategory(id, productDto));
     }
     @PatchMapping("products/status/{id}")
