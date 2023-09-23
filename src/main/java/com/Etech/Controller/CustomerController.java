@@ -1,15 +1,11 @@
 package com.Etech.Controller;
 
 import com.Etech.Dto.ProductDto;
-import com.Etech.Exception.ResourceException;
-import com.Etech.Model.Product;
 import com.Etech.Service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/customer/")

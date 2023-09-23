@@ -6,7 +6,7 @@ import com.Etech.Exception.ResourceException;
 import com.Etech.Model.Product;
 import com.Etech.Model.enums.ProductCategory;
 import com.Etech.Repository.ProductRepo;
-import com.Etech.Service.ViewerService;
+import com.Etech.Service.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class ViewerServiceImp implements ViewerService {
+public class ProductServiceImp implements ProductService {
 
     @Autowired
     ProductRepo productRepo;
@@ -30,13 +30,11 @@ public class ViewerServiceImp implements ViewerService {
     public ProductDto findProductByName(String name) {
         var product = productRepo.getProductByName (name).orElseThrow ( () -> new ResourceException("Product with the Name : "+ name + " is not present"));
         return modelMapper.map (  product,ProductDto.class);
-
     }
 
     @Override
     public List<ProductDto> getAllProducts() {
         return productRepo.findAll ().stream ().map ( product -> modelMapper.map ( product, ProductDto.class)).collect( Collectors.toList());
-//        return null;
     }
 
     @Override
@@ -57,21 +55,18 @@ public class ViewerServiceImp implements ViewerService {
         }
         else
         return product.stream ().map ( p -> modelMapper.map ( p, ProductDto.class ) ).collect ( Collectors.toList () );
-
-//        return null;
     }
 
     @Override
       public List<ProductDto> findAllByKeyWord(String keyWord) {
           return productRepo.findAllByKeyWord ( keyWord ).stream ().map ( product -> modelMapper.map ( product, ProductDto.class)).collect( Collectors.toList());
-//    return null;
     }
 
 
-    @Override
-    public List<ProductDto> filterProducts(String name, String category, String keyWord) {
-
-        List<ProductDto> productDtoList = new ArrayList<> ();
+//    @Override
+//    public List<ProductDto> filterProducts(String name, String category, String keyWord) {
+//
+//        List<ProductDto> productDtoList = new ArrayList<> ();
 //        if(keyWord!=null){
 //            productDtoList = productRepo.findAllByKeyWord ( keyWord ).stream ().map ( product -> modelMapper.map ( product, ProductDto.class)).collect( Collectors.toList());
 //        }
@@ -103,6 +98,6 @@ public class ViewerServiceImp implements ViewerService {
 //            Product product = productRepo.getProductByName (name).orElseThrow ( () -> new ResourceException("Product with the Name : "+ name + " is not present"));
 //            productDtoList.add ( modelMapper.map ( product, ProductDto.class));
 //        }
-        return productDtoList;
-     }
+//        return productDtoList;
+//     }
 }
