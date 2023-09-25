@@ -101,8 +101,6 @@ public class AdminServiceImpl implements AdminService {
         return productList.stream().map(product -> modelMapper.map(product,ProductDto.class)).collect(Collectors.toList());
     }
 
-
-
     @Override
     public void deleteProduct(long id) {
 

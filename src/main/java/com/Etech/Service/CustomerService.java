@@ -8,4 +8,5 @@ import java.util.List;
 public interface CustomerService {
 
     public List<ProductDto> findAll();
+
 }

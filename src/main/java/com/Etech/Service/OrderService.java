@@ -22,7 +22,4 @@ public interface OrderService {
 
     public CustomerDto getCustomerByOrderNumber(String orderNumber);
 
-
-
-
 }
