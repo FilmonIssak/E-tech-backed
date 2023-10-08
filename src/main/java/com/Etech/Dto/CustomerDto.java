@@ -2,6 +2,8 @@ package com.Etech.Dto;
 
 import com.Etech.Model.Address;
 import com.Etech.Model.CreditCard;
+import com.Etech.Model.Role;
+import com.Etech.Model.enums.CustomerStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +22,8 @@ public class CustomerDto {
     private String password;
     private String phone;
 
+    private CustomerStatus customerStatus;
+    private Role role;
 
     private CreditCard creditCard;
 
