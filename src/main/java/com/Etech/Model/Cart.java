@@ -25,13 +25,19 @@ public class Cart {
     @OneToOne
     private Customer customer;
 
-
+    @OneToOne
+    private Viewer viewer;
     public void addProduct(Product product){
-        products.add(product);
+        this.products.add(product);
+        this.quantity += 1;
+        this.totalPrice += product.getPrice();
     }
-
 //    @OneToMany
 //    private List<OrderDto> orders;
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+    }
 
 
 }

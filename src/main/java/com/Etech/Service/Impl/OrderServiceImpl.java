@@ -2,11 +2,13 @@ package com.Etech.Service.Impl;
 
 import com.Etech.Dto.OrderDto;
 import com.Etech.Exception.ResourceException;
+import com.Etech.Model.Customer;
 import com.Etech.Model.Order;
 import com.Etech.Model.Product;
 import com.Etech.Model.enums.OrderStatus;
 import com.Etech.Model.enums.ProductStatus;
 import com.Etech.Repository.AddressRepository;
+import com.Etech.Repository.CustomerRepo;
 import com.Etech.Repository.OrderRepository;
 import com.Etech.Service.OrderService;
 import org.modelmapper.ModelMapper;
@@ -26,6 +28,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    CustomerRepo customerRepo;
 
     @Autowired
     private AddressRepository addressRepository;
@@ -96,4 +101,20 @@ public class OrderServiceImpl implements OrderService {
                   }
 
               }
+
+
+
+
+
+              ////////////////////
+
+    @Override
+    public OrderDto placeOrder(Long customerId, OrderDto orderDto) {
+        Customer customer = customerRepo.findById(customerId).orElseThrow(() -> new ResourceException("Customer not found"));
+        Order order = modelMapper.map(orderDto, Order.class);
+        order.setCustomer(customer);
+        orderRepository.save(order);
+        return modelMapper.map(order, OrderDto.class);
+    }
+
 }

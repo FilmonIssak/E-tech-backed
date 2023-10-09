@@ -1,13 +1,15 @@
 package com.Etech.Service;
 
 
+import com.Etech.Dto.CartDto;
 import com.Etech.Dto.ProductDto;
+import com.Etech.Dto.ViewerDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public interface ProductService {
+public interface ViewerService {
 
     ProductDto findProductByName(String name);
     List<ProductDto> getAllProducts();
@@ -16,4 +18,7 @@ public interface ProductService {
     List<ProductDto> findAllByKeyWord(String keyWord);
 
 //    List<ProductDto> filterProducts(String name, String category, String keyWord);
+    public ViewerDto register(ViewerDto viewerDto);
+    public CartDto addProductToViewerCart(Long viewerId, Long productId);
+
 }
