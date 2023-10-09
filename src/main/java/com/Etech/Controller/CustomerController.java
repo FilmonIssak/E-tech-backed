@@ -1,6 +1,5 @@
 package com.Etech.Controller;
 
-import com.Etech.Dto.ProductDto;
 import com.Etech.Service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
+
 
     @GetMapping("products")
     public ResponseEntity<?> getAllProducts() {

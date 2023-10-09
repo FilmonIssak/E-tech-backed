@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,10 +20,10 @@ public class Order {
     @Id
     @GeneratedValue
     private Long id;
-    private String orderNumber;
+    private Long orderNumber;
     private String orderDate;
     private String orderTime;
-    private String orderTotal;
+    private Double orderTotal;
 
     @Enumerated
     private OrderStatus orderStatus;
@@ -37,8 +39,8 @@ public class Order {
      */
 
 
-    @OneToOne
-    private Cart cart;
+    @OneToMany
+    private List<Product> productCartItems = new ArrayList<>();
 
     @ManyToOne
     private Customer customer;

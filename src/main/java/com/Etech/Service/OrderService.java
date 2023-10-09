@@ -4,22 +4,21 @@ import com.Etech.Dto.CustomerDto;
 import com.Etech.Dto.OrderDto;
 import com.Etech.Dto.ProductDto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderService {
 
-    public ProductDto findProductById(long id);
+    public OrderDto findOrderById(long id);
 
-    public OrderDto addOrder (OrderDto orderDto);
+    public OrderDto cancelOrderByOrderId(long id);
 
-    public void cancelOrder(long id);
+    //public OrderDto addOrder (OrderDto orderDto);
 
-    public OrderDto updateOrder (long id, OrderDto orderDto);
 
-    public List<OrderDto> getAllOrdersByDate(String orderDate);
+   // public OrderDto updateOrder (long id, OrderDto orderDto);
 
-    public List<OrderDto> getAllOrders();
+    //public CustomerDto getCustomerByOrderNumber(Long orderNumber);
 
-    public CustomerDto getCustomerByOrderNumber(String orderNumber);
 
 }

@@ -847,7 +847,7 @@ class AdminServiceImplTest {
         product1.setId(2L);
         product1.setName("com.Etech.Model.Product");
         product1.setPrice(0.5d);
-        product1.setProductCategory(ProductCategory.BOOKs);
+        product1.setProductCategory(ProductCategory.BOOKS);
         product1.setProductStatus(ProductStatus.OUTOFSTOCK);
         product1.setQuantity(0);
 
