@@ -20,5 +20,7 @@ public interface OrderService {
 
     //public CustomerDto getCustomerByOrderNumber(Long orderNumber);
 
+////////////
 
+    public OrderDto placeOrder(Long customerId, OrderDto orderDto);
 }

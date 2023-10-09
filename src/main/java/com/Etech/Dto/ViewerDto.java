@@ -1,30 +1,22 @@
-package com.Etech.Model;
+package com.Etech.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Viewer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@NoArgsConstructor
+public class ViewerDto {
     private Long id;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
 
-    @OneToOne
-    private Cart cart;
+    private CartDto cart;
 
-    @OneToMany
-    private List<Order> orders;
-
+    private List<OrderDto> orders;
 }

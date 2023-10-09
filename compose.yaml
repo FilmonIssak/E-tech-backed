@@ -26,3 +26,22 @@ services:
 volumes:
   postgres:
   pgadmin:
+
+#
+#spring:
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/e-tech
+#    username: postgres
+#    password: test123
+#    driver-class-name: org.postgresql.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#
+#server:
+#  port: 8080
+

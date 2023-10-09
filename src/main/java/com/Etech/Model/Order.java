@@ -31,31 +31,11 @@ public class Order {
     @ManyToOne
     private Address address;
 
-    /**
-     * @Author Filmon,sase,abi
-     * we have to update this one
-     *
-     * We have to create a payment class
-     */
-
-
     @OneToMany
     private List<Product> productCartItems = new ArrayList<>();
 
     @ManyToOne
     private Customer customer;
-
-//    private String orderSubtotal;
-//    private String orderTax;
-//    private String orderShipping;
-//    private String orderDiscount;
-//    private String orderPaymentMethod;
-//    private String orderPaymentStatus;
-//    private String orderShippingMethod;
-//    private String orderShippingStatus;
-//    private String orderShippingAddress;
-//    private String orderBillingAddress;
-
 
 
 }

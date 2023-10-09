@@ -1,29 +1,36 @@
 package com.Etech.Service.Impl;
 
 
+import com.Etech.Dto.CartDto;
 import com.Etech.Dto.ProductDto;
+import com.Etech.Dto.ViewerDto;
 import com.Etech.Exception.ResourceException;
+import com.Etech.Model.Cart;
 import com.Etech.Model.Product;
+import com.Etech.Model.Viewer;
 import com.Etech.Model.enums.ProductCategory;
 import com.Etech.Repository.ProductRepo;
-import com.Etech.Service.ProductService;
+import com.Etech.Repository.ViewerRepo;
+import com.Etech.Service.ViewerService;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class ProductServiceImp implements ProductService {
+public class ViewerServiceImp implements ViewerService {
 
     @Autowired
-    ProductRepo productRepo;
+    private ProductRepo productRepo;
     @Autowired
-    ModelMapper modelMapper;
+    private ViewerRepo viewerRepo;
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     @Override
@@ -100,4 +107,26 @@ public class ProductServiceImp implements ProductService {
 //        }
 //        return productDtoList;
 //     }
+
+
+    public CartDto addProductToViewerCart(Long viewerId, Long productId) {
+        Viewer viewer = viewerRepo.findById(viewerId).orElseThrow(() -> new ResourceNotFoundException("Viewer not found"));
+        Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+        Cart viewerCart = viewer.getCart();
+        viewerCart.addProduct(product);
+
+        viewerRepo.save(viewer);
+
+        return modelMapper.map(viewerCart, CartDto.class);
+    }
+
+
+    @Override
+    public ViewerDto register(ViewerDto viewerDto) {
+        Viewer viewer = modelMapper.map(viewerDto, Viewer.class);
+        Viewer savedViewer = viewerRepo.save(viewer);
+        return modelMapper.map(savedViewer, ViewerDto.class);
+    }
+
 }

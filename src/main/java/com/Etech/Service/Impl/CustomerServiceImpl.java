@@ -1,7 +1,10 @@
 package com.Etech.Service.Impl;
 
+import com.Etech.Dto.CustomerDto;
 import com.Etech.Dto.ProductDto;
+import com.Etech.Model.Customer;
 import com.Etech.Model.Product;
+import com.Etech.Repository.CustomerRepo;
 import com.Etech.Repository.ProductRepo;
 import com.Etech.Service.CustomerService;
 import org.modelmapper.ModelMapper;
@@ -20,8 +23,23 @@ public class CustomerServiceImpl implements CustomerService {
     private ProductRepo productRepo;
 
     @Autowired
+    private CustomerRepo customerRepo;
+
+    @Autowired
     private ModelMapper modelMapper;
 
+    @Override
+    public CustomerDto register(CustomerDto customerDto) {
+        Customer customer = modelMapper.map(customerDto, Customer.class);
+        Customer savedCustomer = customerRepo.save(customer);
+        return modelMapper.map(savedCustomer, CustomerDto.class);
+    }
+
+    @Override
+    public List<CustomerDto> getAll(){
+        List<Customer> customerList = customerRepo.findAll();
+        return customerList.stream().map(customer -> modelMapper.map(customer,CustomerDto.class)).collect(Collectors.toList());
+    }
     @Override
     public List<ProductDto> findAll() {
         List<Product> productList = productRepo.findAll();

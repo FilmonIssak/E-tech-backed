@@ -27,9 +27,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ContextConfiguration(classes = {ProductServiceImp.class})
+@ContextConfiguration(classes = {ViewerServiceImp.class})
 @ExtendWith(SpringExtension.class)
-class ProductServiceImpTest {
+class ViewerServiceImpTest {
     @MockBean
     private ModelMapper modelMapper;
 
@@ -37,10 +37,10 @@ class ProductServiceImpTest {
     private ProductRepo productRepo;
 
     @Autowired
-    private ProductServiceImp productServiceImp;
+    private ViewerServiceImp viewerServiceImp;
 
     /**
-     * Method under test: {@link ProductServiceImp#findProductByName(String)}
+     * Method under test: {@link ViewerServiceImp#findProductByName(String)}
      */
     @Test
     void testFindProductByName() {
@@ -57,13 +57,13 @@ class ProductServiceImpTest {
         product.setQuantity(1);
         Optional<Product> ofResult = Optional.of(product);
         when(productRepo.getProductByName((String) any())).thenReturn(ofResult);
-        assertSame(productDto, productServiceImp.findProductByName("Name"));
+        assertSame(productDto, viewerServiceImp.findProductByName("Name"));
         verify(modelMapper).map((Object) any(), (Class<ProductDto>) any());
         verify(productRepo).getProductByName((String) any());
     }
 
     /**
-     * Method under test: {@link ProductServiceImp#findProductByName(String)}
+     * Method under test: {@link ViewerServiceImp#findProductByName(String)}
      */
     @Test
     void testFindProductByName2() {
@@ -79,36 +79,36 @@ class ProductServiceImpTest {
         product.setQuantity(1);
         Optional<Product> ofResult = Optional.of(product);
         when(productRepo.getProductByName((String) any())).thenReturn(ofResult);
-        assertThrows(IllegalArgumentException.class, () -> productServiceImp.findProductByName("Name"));
+        assertThrows(IllegalArgumentException.class, () -> viewerServiceImp.findProductByName("Name"));
         verify(modelMapper).map((Object) any(), (Class<ProductDto>) any());
         verify(productRepo).getProductByName((String) any());
     }
 
     /**
-     * Method under test: {@link ProductServiceImp#findProductByName(String)}
+     * Method under test: {@link ViewerServiceImp#findProductByName(String)}
      */
     @Test
     void testFindProductByName3() {
         when(modelMapper.map((Object) any(), (Class<Object>) any())).thenReturn("Map");
         when(modelMapper.map((Object) any(), (Class<ProductDto>) any())).thenReturn(new ProductDto());
         when(productRepo.getProductByName((String) any())).thenReturn(Optional.empty());
-        assertThrows(ResourceException.class, () -> productServiceImp.findProductByName("Name"));
+        assertThrows(ResourceException.class, () -> viewerServiceImp.findProductByName("Name"));
         verify(modelMapper).map((Object) any(), (Class<Object>) any());
         verify(productRepo).getProductByName((String) any());
     }
 
     /**
-     * Method under test: {@link ProductServiceImp#getAllProducts()}
+     * Method under test: {@link ViewerServiceImp#getAllProducts()}
      */
     @Test
     void testGetAllProducts() {
         when(productRepo.findAll()).thenReturn(new ArrayList<>());
-        assertTrue(productServiceImp.getAllProducts().isEmpty());
+        assertTrue(viewerServiceImp.getAllProducts().isEmpty());
         verify(productRepo).findAll();
     }
 
     /**
-     * Method under test: {@link ProductServiceImp#getAllProducts()}
+     * Method under test: {@link ViewerServiceImp#getAllProducts()}
      */
     @Test
     void testGetAllProducts2() {
@@ -126,13 +126,13 @@ class ProductServiceImpTest {
         ArrayList<Product> productList = new ArrayList<>();
         productList.add(product);
         when(productRepo.findAll()).thenReturn(productList);
-        assertEquals(1, productServiceImp.getAllProducts().size());
+        assertEquals(1, viewerServiceImp.getAllProducts().size());
         verify(modelMapper).map((Object) any(), (Class<ProductDto>) any());
         verify(productRepo).findAll();
     }
 
     /**
-     * Method under test: {@link ProductServiceImp#getAllProducts()}
+     * Method under test: {@link ViewerServiceImp#getAllProducts()}
      */
     @Test
     void testGetAllProducts3() {
@@ -160,13 +160,13 @@ class ProductServiceImpTest {
         productList.add(product1);
         productList.add(product);
         when(productRepo.findAll()).thenReturn(productList);
-        assertEquals(2, productServiceImp.getAllProducts().size());
+        assertEquals(2, viewerServiceImp.getAllProducts().size());
         verify(modelMapper, atLeast(1)).map((Object) any(), (Class<ProductDto>) any());
         verify(productRepo).findAll();
     }
 
     /**
-     * Method under test: {@link ProductServiceImp#getAllProducts()}
+     * Method under test: {@link ViewerServiceImp#getAllProducts()}
      */
     @Test
     void testGetAllProducts4() {
@@ -184,32 +184,32 @@ class ProductServiceImpTest {
         ArrayList<Product> productList = new ArrayList<>();
         productList.add(product);
         when(productRepo.findAll()).thenReturn(productList);
-        assertThrows(IllegalArgumentException.class, () -> productServiceImp.getAllProducts());
+        assertThrows(IllegalArgumentException.class, () -> viewerServiceImp.getAllProducts());
         verify(modelMapper).map((Object) any(), (Class<ProductDto>) any());
         verify(productRepo).findAll();
     }
 
     /**
-     * Method under test: {@link ProductServiceImp#findAllByCatagory(String)}
+     * Method under test: {@link ViewerServiceImp#findAllByCatagory(String)}
      */
     @Test
     void testFindAllByCatagory() throws RuntimeException {
-        assertThrows(ResourceException.class, () -> productServiceImp.findAllByCatagory("Category"));
-        assertThrows(ResourceException.class, () -> productServiceImp.findAllByCatagory("42"));
+        assertThrows(ResourceException.class, () -> viewerServiceImp.findAllByCatagory("Category"));
+        assertThrows(ResourceException.class, () -> viewerServiceImp.findAllByCatagory("42"));
     }
 
     /**
-     * Method under test: {@link ProductServiceImp#findAllByKeyWord(String)}
+     * Method under test: {@link ViewerServiceImp#findAllByKeyWord(String)}
      */
     @Test
     void testFindAllByKeyWord() {
         when(productRepo.findAllByKeyWord((String) any())).thenReturn(new ArrayList<>());
-        assertTrue(productServiceImp.findAllByKeyWord("Key Word").isEmpty());
+        assertTrue(viewerServiceImp.findAllByKeyWord("Key Word").isEmpty());
         verify(productRepo).findAllByKeyWord((String) any());
     }
 
     /**
-     * Method under test: {@link ProductServiceImp#findAllByKeyWord(String)}
+     * Method under test: {@link ViewerServiceImp#findAllByKeyWord(String)}
      */
     @Test
     void testFindAllByKeyWord2() {
@@ -227,13 +227,13 @@ class ProductServiceImpTest {
         ArrayList<Product> productList = new ArrayList<>();
         productList.add(product);
         when(productRepo.findAllByKeyWord((String) any())).thenReturn(productList);
-        assertEquals(1, productServiceImp.findAllByKeyWord("Key Word").size());
+        assertEquals(1, viewerServiceImp.findAllByKeyWord("Key Word").size());
         verify(modelMapper).map((Object) any(), (Class<ProductDto>) any());
         verify(productRepo).findAllByKeyWord((String) any());
     }
 
     /**
-     * Method under test: {@link ProductServiceImp#findAllByKeyWord(String)}
+     * Method under test: {@link ViewerServiceImp#findAllByKeyWord(String)}
      */
     @Test
     void testFindAllByKeyWord3() {
@@ -261,13 +261,13 @@ class ProductServiceImpTest {
         productList.add(product1);
         productList.add(product);
         when(productRepo.findAllByKeyWord((String) any())).thenReturn(productList);
-        assertEquals(2, productServiceImp.findAllByKeyWord("Key Word").size());
+        assertEquals(2, viewerServiceImp.findAllByKeyWord("Key Word").size());
         verify(modelMapper, atLeast(1)).map((Object) any(), (Class<ProductDto>) any());
         verify(productRepo).findAllByKeyWord((String) any());
     }
 
     /**
-     * Method under test: {@link ProductServiceImp#findAllByKeyWord(String)}
+     * Method under test: {@link ViewerServiceImp#findAllByKeyWord(String)}
      */
     @Test
     void testFindAllByKeyWord4() {
@@ -285,7 +285,7 @@ class ProductServiceImpTest {
         ArrayList<Product> productList = new ArrayList<>();
         productList.add(product);
         when(productRepo.findAllByKeyWord((String) any())).thenReturn(productList);
-        assertThrows(IllegalArgumentException.class, () -> productServiceImp.findAllByKeyWord("Key Word"));
+        assertThrows(IllegalArgumentException.class, () -> viewerServiceImp.findAllByKeyWord("Key Word"));
         verify(modelMapper).map((Object) any(), (Class<ProductDto>) any());
         verify(productRepo).findAllByKeyWord((String) any());
     }

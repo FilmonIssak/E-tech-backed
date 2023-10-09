@@ -1,6 +1,7 @@
 package com.Etech.Controller;
 
 import com.Etech.Dto.CustomerDto;
+import com.Etech.Dto.OrderDto;
 import com.Etech.Dto.ProductDto;
 import com.Etech.Service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,4 +113,45 @@ public class AdminController {
     }
 
 
+    ////////////////////////
+
+
+    @PatchMapping("orders/{id}/processing")
+    public ResponseEntity<?> updateOrderStatusToProcessing(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToProcessing(id));
+    }
+
+    @PatchMapping("orders/{id}/delivery")
+    public ResponseEntity<?> updateOrderStatusToDelivery(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToDelivery(id));
+    }
+
+    @PatchMapping("orders/{id}/shipping")
+    public ResponseEntity<?> updateOrderStatusToShipping(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToShipping(id));
+    }
+
+    @DeleteMapping("orders/{id}")
+    public ResponseEntity<?> deleteOrder(@PathVariable Long id) {
+        adminService.deleteOrder(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Order successfully deleted");
+    }
+
+
+
+    @PostMapping("viewers/{viewerId}/cart/products/{productId}")
+    public ResponseEntity<?> addProductToCartForViewer(@PathVariable Long viewerId, @PathVariable Long productId) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.addProductToCartForViewer(viewerId, productId));
+    }
+
+    @DeleteMapping("viewers/{viewerId}/cart/products/{productId}")
+    public ResponseEntity<?> deleteProductFromCartForViewer(@PathVariable Long viewerId, @PathVariable Long productId) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.deleteProductFromCartForViewer(viewerId, productId));
+    }
+
+
+    @PostMapping("customers/{customerId}/orders")
+    public ResponseEntity<?> placeOrder(@PathVariable Long customerId, @RequestBody OrderDto orderDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.placeOrder(customerId, orderDto));
+    }
 }

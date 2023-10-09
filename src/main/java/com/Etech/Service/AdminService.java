@@ -1,5 +1,6 @@
 package com.Etech.Service;
 
+import com.Etech.Dto.CartDto;
 import com.Etech.Dto.CustomerDto;
 import com.Etech.Dto.OrderDto;
 import com.Etech.Dto.ProductDto;
@@ -36,6 +37,22 @@ public interface AdminService {
     public List<OrderDto> getAllOrders();
 
     //public CustomerDto getCustomerByOrderNumber(Long orderNumber);
+
+
+    //////////////////////////
+    public OrderDto updateOrderStatusToProcessing(Long orderId);
+
+    public void deleteOrder(Long orderId);
+
+    public OrderDto updateOrderStatusToDelivery(Long orderId);
+
+    public OrderDto updateOrderStatusToShipping(Long orderId);
+
+    public CartDto addProductToCartForViewer(Long viewerId, Long productId);
+
+    public CartDto deleteProductFromCartForViewer(Long viewerId, Long productId);
+
+    public OrderDto placeOrder(Long customerId, OrderDto orderDto);
 
 
 }

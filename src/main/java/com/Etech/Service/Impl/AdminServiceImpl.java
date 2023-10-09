@@ -1,18 +1,11 @@
 package com.Etech.Service.Impl;
 
-import com.Etech.Dto.CustomerDto;
-import com.Etech.Dto.OrderDto;
-import com.Etech.Dto.PasswordDTO;
-import com.Etech.Dto.ProductDto;
+import com.Etech.Dto.*;
 import com.Etech.Exception.ResourceException;
-import com.Etech.Model.Customer;
-import com.Etech.Model.Order;
-import com.Etech.Model.Product;
+import com.Etech.Model.*;
 import com.Etech.Model.enums.OrderStatus;
 import com.Etech.Model.enums.ProductStatus;
-import com.Etech.Repository.CustomerRepo;
-import com.Etech.Repository.OrderRepository;
-import com.Etech.Repository.ProductRepo;
+import com.Etech.Repository.*;
 import com.Etech.Service.AdminService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +32,12 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private CartRepository cartRepo;
+
+    @Autowired
+    private ViewerRepo viewerRepo;
 
 
 
@@ -212,4 +211,85 @@ public class AdminServiceImpl implements AdminService {
         List<Order> orderList = orderRepository.findAll();
         return orderList.stream().map(order -> modelMapper.map(order, OrderDto.class)).collect(Collectors.toList());
     }
+
+
+    /**
+     * @Author: Filmon Issak check it out and will discuss it later
+     * Those are the new implemented methods
+     * @method updateOrderStatusToProcessing
+     * @method deleteOrder
+     * @method updateOrderStatusToDelivery
+     * @method updateOrderStatusToShipping
+     * @method addProductToCartForViewer
+     * @method deleteProductFromCartForViewer
+     * @method placeOrder
+     */
+
+
+
+    @Override
+    public OrderDto updateOrderStatusToProcessing(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
+        order.setOrderStatus(OrderStatus.PENDING);
+        orderRepository.save(order);
+        return modelMapper.map(order, OrderDto.class);
+    }
+
+    @Override
+    public void deleteOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order to be deleted not found"));
+        orderRepository.delete(order);
+    }
+
+    @Override
+    public OrderDto updateOrderStatusToDelivery(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
+        order.setOrderStatus(OrderStatus.SUCCESS);
+        orderRepository.save(order);
+        return modelMapper.map(order, OrderDto.class);
+    }
+
+
+    @Override
+    public OrderDto updateOrderStatusToShipping(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
+        order.setOrderStatus(OrderStatus.Shipped);  // This is based on your provided enums. You might need a new enum for SHIPPING.
+        orderRepository.save(order);
+        return modelMapper.map(order, OrderDto.class);
+    }
+
+    @Override
+    public CartDto addProductToCartForViewer(Long viewerId, Long productId) {
+        Viewer viewer = viewerRepo.findById(viewerId).orElseThrow(() -> new ResourceException("Viewer not found"));
+        Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceException("Product not found"));
+        Cart viewerCart = viewer.getCart();
+        viewerCart.addProduct(product);
+        cartRepo.save(viewerCart);
+        return modelMapper.map(viewerCart, CartDto.class);
+    }
+
+
+    @Override
+    public CartDto deleteProductFromCartForViewer(Long viewerId, Long productId) {
+        Viewer viewer = viewerRepo.findById(viewerId).orElseThrow(() -> new ResourceException("Viewer not found"));
+        Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceException("Product not found"));
+        Cart viewerCart = viewer.getCart();
+        viewerCart.removeProduct(product);
+        cartRepo.save(viewerCart);
+        return modelMapper.map(viewerCart, CartDto.class);
+    }
+
+
+
+    //customer place an order
+    @Override
+    public OrderDto placeOrder(Long customerId, OrderDto orderDto) {
+        Customer customer = customerRepo.findById(customerId).orElseThrow(() -> new ResourceException("Customer not found"));
+        Order order = modelMapper.map(orderDto, Order.class);
+        order.setCustomer(customer);
+        orderRepository.save(order);
+        return modelMapper.map(order, OrderDto.class);
+    }
+
+
 }
