@@ -29,8 +29,8 @@ public class Customer {
     @Enumerated(EnumType.STRING)
     private CustomerStatus customerStatus;
 
-//    @OneToOne
-//    private Role role;
+    @OneToOne
+    private Role role;
 
     @Embedded
     private CreditCard creditCard;

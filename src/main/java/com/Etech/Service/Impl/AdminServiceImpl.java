@@ -1,8 +1,17 @@
 package com.Etech.Service.Impl;
 
+import com.Etech.Dto.CustomerDto;
+import com.Etech.Dto.OrderDto;
+import com.Etech.Dto.PasswordDTO;
 import com.Etech.Dto.ProductDto;
 import com.Etech.Exception.ResourceException;
+import com.Etech.Model.Customer;
+import com.Etech.Model.Order;
 import com.Etech.Model.Product;
+import com.Etech.Model.enums.OrderStatus;
+import com.Etech.Model.enums.ProductStatus;
+import com.Etech.Repository.CustomerRepo;
+import com.Etech.Repository.OrderRepository;
 import com.Etech.Repository.ProductRepo;
 import com.Etech.Service.AdminService;
 import org.modelmapper.ModelMapper;
@@ -24,6 +33,15 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    private CustomerRepo customerRepo;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+
+
 
 
     @Override
@@ -101,8 +119,6 @@ public class AdminServiceImpl implements AdminService {
         return productList.stream().map(product -> modelMapper.map(product,ProductDto.class)).collect(Collectors.toList());
     }
 
-
-
     @Override
     public void deleteProduct(long id) {
 
@@ -110,5 +126,90 @@ public class AdminServiceImpl implements AdminService {
         productRepo.delete(toBeDeleted);
     }
 
+    /** Customer $*/
 
+    @Override
+    public CustomerDto updateCustomerPassword(Long id, CustomerDto customerDto) {
+        Customer toBeUpdated = customerRepo.findCustomersById(id).orElseThrow(() -> new ResourceException("Customer with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
+        toBeUpdated.setPassword(customerDto.getPassword());
+        customerRepo.save(toBeUpdated);
+        return modelMapper.map(toBeUpdated, CustomerDto.class);
+    }
+
+/**
+ * Will update the updatePassword with this change password later $
+ *
+ * @Override
+    public void changePassword(long id, PasswordDTO passwordDTO) {
+        Customer customer = customerRepo.findById(id).orElseThrow(()->new ResourceException("Customer Not found"));
+        if (!passwordDTO.getNewPassword().equals(passwordDTO.getVerifyNewPassword())){
+            throw new ResourceException("Password must match",HttpStatus.CONFLICT);
+        }
+        customer.setId(id);
+        customer.setPassword(bCryptPasswordEncoder.encode(passwordDTO.getVerifyNewPassword()));
+        customerRepo.save(customer);
+    }
+ */
+
+    @Override
+    public CustomerDto updateCustomerPhone(Long id, CustomerDto customerDto) {
+        Customer toBeUpdated = customerRepo.findCustomersById(id).orElseThrow(() -> new ResourceException("Customer with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
+        toBeUpdated.setPhone(customerDto.getPhone());
+        customerRepo.save(toBeUpdated);
+        return modelMapper.map(toBeUpdated, CustomerDto.class);
+    }
+
+    @Override
+    public CustomerDto updateCustomerEmail(Long id, CustomerDto customerDto) {
+        Customer toBeUpdated = customerRepo.findCustomersById(id).orElseThrow(() -> new ResourceException("Customer with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
+        toBeUpdated.setEmail(customerDto.getEmail());
+        customerRepo.save(toBeUpdated);
+        return modelMapper.map(toBeUpdated, CustomerDto.class);
+    }
+
+    @Override
+    public CustomerDto activateOrDeactivateCustomerStatus(Long id, CustomerDto customerDto) {
+        Customer toBeUpdated = customerRepo.findCustomersById(id).orElseThrow(() -> new ResourceException("Customer with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
+        toBeUpdated.setCustomerStatus(customerDto.getCustomerStatus());
+        customerRepo.save(toBeUpdated);
+        return modelMapper.map(toBeUpdated, CustomerDto.class);
+    }
+
+    @Override
+    public CustomerDto updateCustomerDetails(Long id, CustomerDto customerDto) {
+        Customer toBeUpdated = customerRepo.findCustomersById(id).orElseThrow(() -> new ResourceException("Customer with id: "+ id + " is not present", HttpStatus.NOT_FOUND));
+        toBeUpdated.setFirstName(customerDto.getFirstName());
+        toBeUpdated.setLastName(customerDto.getLastName());
+        toBeUpdated.setPassword(customerDto.getPassword());
+        toBeUpdated.setRole(customerDto.getRole());
+        toBeUpdated.setPhone(customerDto.getPhone());
+        toBeUpdated.setEmail(customerDto.getEmail());
+        toBeUpdated.setCustomerStatus(customerDto.getCustomerStatus());
+        toBeUpdated.setCreditCard(customerDto.getCreditCard());
+        customerRepo.save(toBeUpdated);
+        return modelMapper.map(toBeUpdated, CustomerDto.class);
+    }
+
+    @Override
+    public void deleteCustomer(Long id) {
+
+        Customer toBeDeleted = customerRepo.findCustomersById(id).orElseThrow(() -> new ResourceException("Customer to be deleted not found"));
+        customerRepo.delete(toBeDeleted);
+
+    }
+
+
+    /** Order $ */
+
+    @Override
+    public List<OrderDto> getAllOrdersByDate(String orderDate) {
+        List<Order> listOfOrdersOntheDay = orderRepository.findOrderByOrderDate(orderDate);
+        return listOfOrdersOntheDay.stream().map(order -> modelMapper.map(order, OrderDto.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderDto> getAllOrders() {
+        List<Order> orderList = orderRepository.findAll();
+        return orderList.stream().map(order -> modelMapper.map(order, OrderDto.class)).collect(Collectors.toList());
+    }
 }

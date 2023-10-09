@@ -1,5 +1,6 @@
 package com.Etech.Controller;
 
+import com.Etech.Dto.CustomerDto;
 import com.Etech.Dto.ProductDto;
 import com.Etech.Service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ public class AdminController {
 
     @Autowired
     private  AdminService adminService;
+
 
     @PostMapping("products")
     public ResponseEntity<?> addProduct(@RequestBody ProductDto productDto) {
@@ -57,6 +59,56 @@ public class AdminController {
     public ResponseEntity<?> deleteProduct(@PathVariable long id) {
         adminService.deleteProduct(id);
         return ResponseEntity.status(HttpStatus.OK).body("Product Successfully deleted");
+    }
+
+    /** Customer $*/
+    @PatchMapping("customer/password/{id}")
+    public ResponseEntity<?> updateCustomerPassword(@PathVariable long id, @RequestBody CustomerDto customerDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateCustomerPassword(id,customerDto));
+    }
+
+    /**
+     * to be updated later
+     *
+    @PatchMapping("customer/password/{id}")
+    public ResponseEntity<?> changePassword(@PathVariable long id, @RequestBody PasswordDTO passwordDTO) {
+        ApiResponse response = ApiResponse.builder().message("Password changed successfully").success(true).status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.changePassword(id,passwordDTO));
+    }
+     */
+
+
+    @PatchMapping("customer/phone/{id}")
+    public ResponseEntity<?> updateCustomerPhone(@PathVariable long id, @RequestBody CustomerDto customerDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateCustomerPhone(id,customerDto));
+    }
+    @PatchMapping("customer/email/{id}")
+    public ResponseEntity<?> updateCustomerEmail(@PathVariable long id, @RequestBody CustomerDto customerDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateCustomerEmail(id,customerDto));
+    }
+    @PatchMapping("customer/{id}")
+    public ResponseEntity<?> activateOrDeactivateCustomerStatus(@PathVariable long id, @RequestBody CustomerDto customerDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.activateOrDeactivateCustomerStatus(id,customerDto));
+    }
+    @PutMapping("customer/{id}")
+    public ResponseEntity<?> updateCustomerDetails(@PathVariable long id, @RequestBody CustomerDto customerDto){
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateCustomerDetails(id, customerDto));
+    }
+    @DeleteMapping("customer/{id}")
+    public ResponseEntity<?> deleteCustomer(@PathVariable long id){
+        adminService.deleteCustomer(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Customer successfully deleted");
+    }
+
+    /** Order $*/
+
+    @GetMapping("orders")
+    public ResponseEntity<List<?>> getAllOrders() {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.getAllOrders());
+    }
+    @GetMapping("orders/date/{date}")
+    public ResponseEntity<List<?>> getOrdersByDate(@PathVariable String date) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.getAllOrdersByDate(date));
     }
 
 
