@@ -5,6 +5,7 @@ import com.Etech.Exception.ResourceException;
 import com.Etech.Model.Customer;
 import com.Etech.Model.Order;
 import com.Etech.Model.Product;
+import com.Etech.Model.enums.CustomerStatus;
 import com.Etech.Model.enums.OrderStatus;
 import com.Etech.Model.enums.ProductStatus;
 import com.Etech.Repository.AddressRepo;
@@ -122,6 +123,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto placeOrder(Long customerId, OrderDto orderDto) {
         Customer customer = customerRepo.findById(customerId).orElseThrow(() -> new ResourceException("Customer not found"));
+        if(customer.getCustomerStatus() != CustomerStatus.ACTIVE){
+            throw new ResourceException("Customer is not Active and can't place an Order");
+        }
         Order order = modelMapper.map(orderDto, Order.class);
         order.setCustomer(customer);
         orderRepository.save(order);

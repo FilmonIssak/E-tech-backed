@@ -117,18 +117,18 @@ public class AdminController {
 
 
     @PatchMapping("orders/{id}/processing")
-    public ResponseEntity<?> updateOrderStatusToProcessing(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToProcessing(id));
+    public ResponseEntity<?> updateOrderStatusToProcessing(@PathVariable Long id, @RequestBody OrderDto orderDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToProcessing(id, orderDto));
     }
 
     @PatchMapping("orders/{id}/delivery")
-    public ResponseEntity<?> updateOrderStatusToDelivery(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToDelivery(id));
+    public ResponseEntity<?> updateOrderStatusToDelivery(@PathVariable Long id, @RequestBody OrderDto orderDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToDelivery(id, orderDto));
     }
 
     @PatchMapping("orders/{id}/shipping")
-    public ResponseEntity<?> updateOrderStatusToShipping(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToShipping(id));
+    public ResponseEntity<?> updateOrderStatusToShipping(@PathVariable Long id, @RequestBody OrderDto orderDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToShipping(id, orderDto));
     }
 
     @DeleteMapping("orders/{id}")
