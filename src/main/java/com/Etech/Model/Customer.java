@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,22 +25,22 @@ public class Customer {
     private String email;
     private String password;
     private String phone;
-    private LocalDateTime dateOfRegistration;
+    private LocalDate dateOfRegistration;
 
     @Enumerated(EnumType.STRING)
     private CustomerStatus customerStatus;
 
-    @OneToOne
+    @ManyToOne
     private Role role;
 
     @Embedded
     private CreditCard creditCard;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Address> addresses;
 
-    @OneToMany
-    private List<Order> orders;
+//    @OneToMany(cascade = CascadeType.ALL)
+//    private List<Order> orders;
 
 
 }

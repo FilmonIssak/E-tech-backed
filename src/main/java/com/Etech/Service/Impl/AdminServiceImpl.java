@@ -258,35 +258,13 @@ public class AdminServiceImpl implements AdminService {
         return modelMapper.map(order, OrderDto.class);
     }
 
-    @Override
-    public CartDto addProductToCartForViewer(Long viewerId, Long productId) {
-        Viewer viewer = viewerRepo.findById(viewerId).orElseThrow(() -> new ResourceException("Viewer not found"));
-        Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceException("Product not found"));
-        Cart viewerCart = viewer.getCart();
-        viewerCart.addProduct(product);
-        cartRepo.save(viewerCart);
-        return modelMapper.map(viewerCart, CartDto.class);
-    }
 
-
-    @Override
-    public CartDto deleteProductFromCartForViewer(Long viewerId, Long productId) {
-        Viewer viewer = viewerRepo.findById(viewerId).orElseThrow(() -> new ResourceException("Viewer not found"));
-        Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceException("Product not found"));
-        Cart viewerCart = viewer.getCart();
-        viewerCart.removeProduct(product);
-        cartRepo.save(viewerCart);
-        return modelMapper.map(viewerCart, CartDto.class);
-    }
-
-
-
-    //customer place an order
     @Override
     public OrderDto placeOrder(Long customerId, OrderDto orderDto) {
         Customer customer = customerRepo.findById(customerId).orElseThrow(() -> new ResourceException("Customer not found"));
         Order order = modelMapper.map(orderDto, Order.class);
         order.setCustomer(customer);
+        order.setProductCartItems(orderDto.getProductCartItems());
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }

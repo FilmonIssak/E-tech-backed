@@ -103,6 +103,14 @@ public class OrderServiceImpl implements OrderService {
               }
 
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // get all orders
+//    @Override
+//    public List<OrderDto> getAllOrders() {
+//        List<Order> orders = orderRepository.findAll();
+//        return orders.stream().map(order -> modelMapper.map(order, OrderDto.class)).collect(Collectors.toList());
+//    }
 
 
 

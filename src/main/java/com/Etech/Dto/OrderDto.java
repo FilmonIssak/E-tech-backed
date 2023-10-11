@@ -3,10 +3,13 @@ package com.Etech.Dto;
 
 import com.Etech.Model.Address;
 import com.Etech.Model.Cart;
+import com.Etech.Model.Product;
 import com.Etech.Model.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,14 +26,7 @@ public class OrderDto {
 
     private Address address;
 
-    /**
-     * @Author Filmon,sase,abi
-     * we have to update this one
-     *
-     * We have to create a payment class
-     */
-
-    private Cart cart;
+    private List<Product> productCartItems;
 
     private CustomerDto customer;
 

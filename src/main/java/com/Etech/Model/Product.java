@@ -24,6 +24,17 @@ public class Product {
 
     //    private String image;
 
+    //        List<Product> productsInCartList = order.getProductCartItems();
+//        for (Product p : productsInCartList) {
+//            int addedQuantity = p.getQuantity() - 1;
+//            p.setQuantity(addedQuantity);
+//        }
+
+    public void deductQuantity(int quantity) {
+        this.quantity -= quantity;
+    }
+
+
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;
 

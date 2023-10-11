@@ -9,6 +9,7 @@ import com.Etech.Model.Cart;
 import com.Etech.Model.Product;
 import com.Etech.Model.Viewer;
 import com.Etech.Model.enums.ProductCategory;
+import com.Etech.Repository.CartRepository;
 import com.Etech.Repository.ProductRepo;
 import com.Etech.Repository.ViewerRepo;
 import com.Etech.Service.ViewerService;
@@ -29,6 +30,8 @@ public class ViewerServiceImp implements ViewerService {
     private ProductRepo productRepo;
     @Autowired
     private ViewerRepo viewerRepo;
+    @Autowired
+    private CartRepository cartRepo;
     @Autowired
     private ModelMapper modelMapper;
 
@@ -108,25 +111,46 @@ public class ViewerServiceImp implements ViewerService {
 //        return productDtoList;
 //     }
 
-
-    public CartDto addProductToViewerCart(Long viewerId, Long productId) {
-        Viewer viewer = viewerRepo.findById(viewerId).orElseThrow(() -> new ResourceNotFoundException("Viewer not found"));
-        Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
-
-        Cart viewerCart = viewer.getCart();
-        viewerCart.addProduct(product);
-
-        viewerRepo.save(viewer);
-
-        return modelMapper.map(viewerCart, CartDto.class);
-    }
-
-
-    @Override
     public ViewerDto register(ViewerDto viewerDto) {
         Viewer viewer = modelMapper.map(viewerDto, Viewer.class);
         Viewer savedViewer = viewerRepo.save(viewer);
         return modelMapper.map(savedViewer, ViewerDto.class);
     }
 
+    public CartDto addProductToViewerCart(Long viewerId, Long productId, int quantity) {
+        if (viewerId == null || productId == null) {
+            throw new IllegalArgumentException("ViewerId or ProductId cannot be null!");
+        }
+        Viewer viewer = viewerRepo.findById(viewerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Viewer not found"));
+        Product product = productRepo.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+        Cart viewerCart = viewer.getCart();
+        if (viewerCart == null) {
+            viewerCart = new Cart();
+            viewer.setCart(viewerCart);
+            viewerCart.setViewer(viewer);
+        }
+
+        viewerCart.addProduct(product, quantity); // Adjusted to accommodate quantity
+
+        viewerRepo.save(viewer);
+        viewerCart = viewer.getCart(); // Refresh the viewerCart object after saving
+        return modelMapper.map(viewerCart, CartDto.class);
+    }
+
+
+
+
+    @Override
+    public CartDto deleteProductFromCartForViewer(Long viewerId, Long productId) {
+        Viewer viewer = viewerRepo.findById(viewerId).orElseThrow(() -> new ResourceException("Viewer not found"));
+        Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceException("Product not found"));
+        Cart viewerCart = viewer.getCart();
+        viewerCart.removeProduct(product);
+        viewerCart.updateTotalPrice();
+        cartRepo.save(viewerCart);
+        return modelMapper.map(viewerCart, CartDto.class);
+    }
 }

@@ -19,6 +19,9 @@ public interface ViewerService {
 
 //    List<ProductDto> filterProducts(String name, String category, String keyWord);
     public ViewerDto register(ViewerDto viewerDto);
-    public CartDto addProductToViewerCart(Long viewerId, Long productId);
+    public CartDto addProductToViewerCart(Long viewerId, Long productId, int quantity);
+//    public CartDto addProductToCartForViewer(Long viewerId, Long productId);
+
+    public CartDto deleteProductFromCartForViewer(Long viewerId, Long productId);
 
 }

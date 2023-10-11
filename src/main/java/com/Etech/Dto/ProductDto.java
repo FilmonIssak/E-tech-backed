@@ -20,7 +20,7 @@ public class ProductDto {
    private int quantity;
 //    private String location;
 
-private ProductStatus productStatus;
-private ProductCategory productCategory;
+    private ProductStatus productStatus;
+    private ProductCategory productCategory;
 
 }

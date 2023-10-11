@@ -21,10 +21,8 @@ public class Viewer {
     private String email;
     private String password;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
 
-    @OneToMany
-    private List<Order> orders;
 
 }
