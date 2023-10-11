@@ -12,13 +12,8 @@ import java.util.List;
 public class CartDto {
 
     private Long id;
-    private int quantity;
     private double totalPrice;
-
-    private List<ProductDto> products;  // Assuming you have a ProductDto defined
-
-    private Long customerId;
+    private List<ProductQuantityDto> productQuantities;
+//    private Long customerId;
     private Long viewerId;
-
-    // You can add more attributes if needed from the Cart entity or related entities
 }

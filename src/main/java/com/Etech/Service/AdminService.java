@@ -48,9 +48,7 @@ public interface AdminService {
 
     public OrderDto updateOrderStatusToShipping(Long orderId);
 
-    public CartDto addProductToCartForViewer(Long viewerId, Long productId);
 
-    public CartDto deleteProductFromCartForViewer(Long viewerId, Long productId);
 
     public OrderDto placeOrder(Long customerId, OrderDto orderDto);
 

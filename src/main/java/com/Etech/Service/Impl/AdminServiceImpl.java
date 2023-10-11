@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,13 +33,10 @@ public class AdminServiceImpl implements AdminService {
     private CustomerRepo customerRepo;
 
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderRepo orderRepository;
 
     @Autowired
-    private CartRepository cartRepo;
-
-    @Autowired
-    private ViewerRepo viewerRepo;
+    private EntityManager entityManager;
 
 
 
@@ -253,43 +252,44 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public OrderDto updateOrderStatusToShipping(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
-        order.setOrderStatus(OrderStatus.Shipped);  // This is based on your provided enums. You might need a new enum for SHIPPING.
+        order.setOrderStatus(OrderStatus.Shipped);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
 
     @Override
-    public CartDto addProductToCartForViewer(Long viewerId, Long productId) {
-        Viewer viewer = viewerRepo.findById(viewerId).orElseThrow(() -> new ResourceException("Viewer not found"));
-        Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceException("Product not found"));
-        Cart viewerCart = viewer.getCart();
-        viewerCart.addProduct(product);
-        cartRepo.save(viewerCart);
-        return modelMapper.map(viewerCart, CartDto.class);
-    }
+    public OrderDto placeOrder(Long customerId, OrderDto orderDto){
+        Customer customer = customerRepo.findById(customerId)
+                .orElseThrow(() -> new ResourceException("Customer not found"));
 
-
-    @Override
-    public CartDto deleteProductFromCartForViewer(Long viewerId, Long productId) {
-        Viewer viewer = viewerRepo.findById(viewerId).orElseThrow(() -> new ResourceException("Viewer not found"));
-        Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceException("Product not found"));
-        Cart viewerCart = viewer.getCart();
-        viewerCart.removeProduct(product);
-        cartRepo.save(viewerCart);
-        return modelMapper.map(viewerCart, CartDto.class);
-    }
-
-
-
-    //customer place an order
-    @Override
-    public OrderDto placeOrder(Long customerId, OrderDto orderDto) {
-        Customer customer = customerRepo.findById(customerId).orElseThrow(() -> new ResourceException("Customer not found"));
         Order order = modelMapper.map(orderDto, Order.class);
         order.setCustomer(customer);
+
+        List<Product> completeProducts = new ArrayList<>();
+        for (Product orderedProduct : order.getProductCartItems()) {
+            Product productFromDb = productRepo.findById(orderedProduct.getId())
+                    .orElseThrow(() -> new ResourceException("Product not found with ID: " + orderedProduct.getId()));
+
+            productFromDb.deductQuantity(orderedProduct.getQuantity());
+
+            if (productFromDb.getQuantity() <= 0) {
+                productFromDb.setProductStatus(ProductStatus.OUTOFSTOCK);
+                productFromDb.setQuantity(0);
+            }
+
+            completeProducts.add(productFromDb);
+            productRepo.save(productFromDb);
+        }
+        order.setProductCartItems(completeProducts);
+
+        if (order.getId() != null) {
+            order = entityManager.merge(order);
+        }
+
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
+
 
 
 }

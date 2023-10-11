@@ -31,7 +31,8 @@ public class Order {
     @ManyToOne
     private Address address;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "order_id")
     private List<Product> productCartItems = new ArrayList<>();
 
     @ManyToOne

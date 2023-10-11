@@ -21,8 +21,10 @@ public class Product {
     private String description;
     private double price;
     private int quantity;
+    public void deductQuantity(int quantity) {
+        this.quantity -= quantity;
+    }
 
-    //    private String image;
 
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;

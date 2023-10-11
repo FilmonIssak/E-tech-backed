@@ -16,11 +16,6 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-//    @PostMapping
-//    public ResponseEntity<?> addOrder(@RequestBody OrderDto orderDto) {
-//        return ResponseEntity.status(HttpStatus.OK).body(orderService.addOrder(orderDto));
-//    }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> findProductById(@PathVariable("id") long id) {
         return ResponseEntity.status(HttpStatus.OK).body(orderService.findOrderById(id));

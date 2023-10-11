@@ -138,18 +138,6 @@ public class AdminController {
     }
 
 
-
-    @PostMapping("viewers/{viewerId}/cart/products/{productId}")
-    public ResponseEntity<?> addProductToCartForViewer(@PathVariable Long viewerId, @PathVariable Long productId) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.addProductToCartForViewer(viewerId, productId));
-    }
-
-    @DeleteMapping("viewers/{viewerId}/cart/products/{productId}")
-    public ResponseEntity<?> deleteProductFromCartForViewer(@PathVariable Long viewerId, @PathVariable Long productId) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.deleteProductFromCartForViewer(viewerId, productId));
-    }
-
-
     @PostMapping("customers/{customerId}/orders")
     public ResponseEntity<?> placeOrder(@PathVariable Long customerId, @RequestBody OrderDto orderDto) {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.placeOrder(customerId, orderDto));

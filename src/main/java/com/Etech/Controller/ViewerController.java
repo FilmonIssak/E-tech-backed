@@ -56,10 +56,22 @@ public class ViewerController {
             return ResponseEntity.status(HttpStatus.CREATED).body(registeredViewer);
         }
 
-        @PostMapping("/{viewerId}/cart/products/{productId}")
-        public ResponseEntity<CartDto> addProductToCart(@PathVariable Long viewerId, @PathVariable Long productId) {
-            CartDto updatedCart = viewerService.addProductToViewerCart(viewerId, productId);
+        @PostMapping("viewer/{viewerId}/cart")
+        public ResponseEntity<CartDto> addProductToCart(@PathVariable Long viewerId, @RequestBody ProductDto productDto) {
+            CartDto updatedCart = viewerService.addProductToViewerCart(viewerId, productDto.getId(), productDto.getQuantity());
             return ResponseEntity.status(HttpStatus.OK).body(updatedCart);
+        }
+
+
+
+
+
+
+
+
+        @DeleteMapping("viewer/{viewerId}/cart/product/{productId}")
+        public ResponseEntity<?> deleteProductFromCartForViewer(@PathVariable Long viewerId, @PathVariable Long productId) {
+            return ResponseEntity.status(HttpStatus.OK).body(viewerService.deleteProductFromCartForViewer(viewerId, productId));
         }
 
 }

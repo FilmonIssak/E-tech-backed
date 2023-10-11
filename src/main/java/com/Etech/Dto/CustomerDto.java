@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -21,6 +23,7 @@ public class CustomerDto {
     private String email;
     private String password;
     private String phone;
+    private LocalDate dateOfRegistration;
 
     private CustomerStatus customerStatus;
     private Role role;
@@ -29,7 +32,6 @@ public class CustomerDto {
 
     private List<Address> addresses;
 
-    private List<OrderDto> orders;
 
 
 }
