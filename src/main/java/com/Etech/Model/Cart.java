@@ -29,10 +29,10 @@ public class Cart {
     @Column(name = "quantity")
     private Map<Product, Integer> products = new HashMap<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Customer customer;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    private Customer customer;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "cart")
     private Viewer viewer;
 
     public void addProduct(Product product, int quantity) {

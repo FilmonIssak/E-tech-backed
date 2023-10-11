@@ -9,7 +9,7 @@ import com.Etech.Model.Cart;
 import com.Etech.Model.Product;
 import com.Etech.Model.Viewer;
 import com.Etech.Model.enums.ProductCategory;
-import com.Etech.Repository.CartRepository;
+import com.Etech.Repository.CartRepo;
 import com.Etech.Repository.ProductRepo;
 import com.Etech.Repository.ViewerRepo;
 import com.Etech.Service.ViewerService;
@@ -31,7 +31,7 @@ public class ViewerServiceImp implements ViewerService {
     @Autowired
     private ViewerRepo viewerRepo;
     @Autowired
-    private CartRepository cartRepo;
+    private CartRepo cartRepo;
     @Autowired
     private ModelMapper modelMapper;
 

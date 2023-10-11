@@ -16,7 +16,4 @@ public class ViewerDto {
     private String email;
     private String password;
 
-//    private CartDto cart;
-
-//    private List<OrderDto> orders;
 }

@@ -7,9 +7,10 @@ import com.Etech.Model.Order;
 import com.Etech.Model.Product;
 import com.Etech.Model.enums.OrderStatus;
 import com.Etech.Model.enums.ProductStatus;
-import com.Etech.Repository.AddressRepository;
+import com.Etech.Repository.AddressRepo;
 import com.Etech.Repository.CustomerRepo;
-import com.Etech.Repository.OrderRepository;
+import com.Etech.Repository.OrderRepo;
+import com.Etech.Repository.ProductRepo;
 import com.Etech.Service.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,23 +18,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderRepo orderRepository;
 
     @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
+    private ProductRepo productRepo;
+
+    @Autowired
     CustomerRepo customerRepo;
 
     @Autowired
-    private AddressRepository addressRepository;
+    private AddressRepo addressRepo;
 
 
     @Override
@@ -124,5 +127,6 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
+
 
 }

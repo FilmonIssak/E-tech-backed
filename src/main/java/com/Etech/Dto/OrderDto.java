@@ -21,14 +21,10 @@ public class OrderDto {
     private String orderDate;
     private String orderTime;
     private String orderTotal;
-
     private OrderStatus orderStatus;
-
     private Address address;
-
     private List<Product> productCartItems;
-
-    private CustomerDto customer;
+//    private CustomerDto customer;
 
 
 }
