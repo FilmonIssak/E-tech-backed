@@ -4,6 +4,7 @@ package com.Etech.Controller;
 import com.Etech.Dto.CartDto;
 import com.Etech.Dto.ProductDto;
 import com.Etech.Dto.ViewerDto;
+import com.Etech.Service.CartService;
 import com.Etech.Service.ViewerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,9 @@ public class ViewerController {
 
     @Autowired
     ViewerService viewerService;
+
+    @Autowired
+    CartService cartService;
 
 
     @GetMapping("products/products")
@@ -63,15 +67,14 @@ public class ViewerController {
         }
 
 
-
-
-
-
-
-
         @DeleteMapping("viewer/{viewerId}/cart/product/{productId}")
         public ResponseEntity<?> deleteProductFromCartForViewer(@PathVariable Long viewerId, @PathVariable Long productId) {
             return ResponseEntity.status(HttpStatus.OK).body(viewerService.deleteProductFromCartForViewer(viewerId, productId));
         }
+
+    @GetMapping("cart/findAll")
+    public ResponseEntity<?> viewAllProductsInViewerCart() {
+        return ResponseEntity.status(HttpStatus.OK).body(cartService.viewAllProductsInCart());
+    }
 
 }

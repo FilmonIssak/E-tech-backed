@@ -20,11 +20,11 @@ public class OrderDto {
     private String orderNumber;
     private String orderDate;
     private String orderTime;
-    private String orderTotal;
+    private Double orderTotal;
     private OrderStatus orderStatus;
     private Address address;
     private List<Product> productCartItems;
-//    private CustomerDto customer;
+    private CustomerDto customer;
 
 
 }

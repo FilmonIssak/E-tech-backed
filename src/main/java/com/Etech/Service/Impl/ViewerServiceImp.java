@@ -140,9 +140,6 @@ public class ViewerServiceImp implements ViewerService {
         return modelMapper.map(viewerCart, CartDto.class);
     }
 
-
-
-
     @Override
     public CartDto deleteProductFromCartForViewer(Long viewerId, Long productId) {
         Viewer viewer = viewerRepo.findById(viewerId).orElseThrow(() -> new ResourceException("Viewer not found"));

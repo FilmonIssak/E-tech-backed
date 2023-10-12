@@ -40,13 +40,13 @@ public interface AdminService {
 
 
     //////////////////////////
-    public OrderDto updateOrderStatusToProcessing(Long orderId);
+    public OrderDto updateOrderStatusToProcessing(Long orderId, OrderDto orderDto);
 
     public void deleteOrder(Long orderId);
 
-    public OrderDto updateOrderStatusToDelivery(Long orderId);
+    public OrderDto updateOrderStatusToDelivery(Long orderId, OrderDto orderDto);
 
-    public OrderDto updateOrderStatusToShipping(Long orderId);
+    public OrderDto updateOrderStatusToShipping(Long orderId, OrderDto orderDto);
 
 
 
