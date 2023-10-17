@@ -2,7 +2,6 @@ package com.Etech.Service.Impl;
 
 import com.Etech.Dto.OrderDto;
 import com.Etech.Exception.ResourceException;
-import com.Etech.Model.Customer;
 import com.Etech.Model.Order;
 import com.Etech.Model.Product;
 import com.Etech.Model.enums.OrderStatus;
@@ -12,11 +11,14 @@ import com.Etech.Repository.CustomerRepo;
 import com.Etech.Repository.OrderRepo;
 import com.Etech.Repository.ProductRepo;
 import com.Etech.Service.OrderService;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -24,7 +26,7 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    private OrderRepo orderRepository;
+    private OrderRepo orderRepo;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -41,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto findOrderById(long id) {
-        Order toGet = orderRepository.findById(id).orElseThrow(() -> new ResourceException("Order with order id: " + id + " is not present"));
+        Order toGet = orderRepo.findById(id).orElseThrow(() -> new ResourceException("Order with order id: " + id + " is not present"));
         return modelMapper.map(toGet, OrderDto.class);
     }
 
@@ -78,10 +80,10 @@ public class OrderServiceImpl implements OrderService {
               @Override
               public OrderDto cancelOrderByOrderId(long id) {
 
-                  Order order= orderRepository.findById(id).orElseThrow(()->new ResourceException("No order exists with given OrderId "+ id));
+                  Order order= orderRepo.findById(id).orElseThrow(()->new ResourceException("No order exists with given OrderId "+ id));
                   if(order.getOrderStatus()== OrderStatus.PENDING) {
                       order.setOrderStatus(OrderStatus.CANCELED);
-                      orderRepository.save(order);
+                      orderRepo.save(order);
                       return modelMapper.map(order, OrderDto.class);
                   }
                   else if(order.getOrderStatus()==OrderStatus.SUCCESS) {
@@ -96,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
                           }
                       }
 
-                      orderRepository.save(order);
+                      orderRepo.save(order);
                       return modelMapper.map(order, OrderDto.class);
                   }
                   else {
@@ -120,12 +122,39 @@ public class OrderServiceImpl implements OrderService {
               ////////////////////
 
     @Override
-    public OrderDto placeOrder(Long customerId, OrderDto orderDto) {
-        Customer customer = customerRepo.findById(customerId).orElseThrow(() -> new ResourceException("Customer not found"));
-        Order order = modelMapper.map(orderDto, Order.class);
-        order.setCustomer(customer);
-        orderRepository.save(order);
+    public OrderDto placeOrder(Long customerId) {
+        // Generate a unique order number or use a custom logic
+        String orderNumber = generateUniqueOrderNumber(customerId);
+
+        // Create a new order entity
+        Order order = new Order();
+        order.setCustomer(customerRepo.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found")));
+        order.setOrderNumber(orderNumber);
+//        order.setOrderDate(Data.));
+        order.setOrderStatus(OrderStatus.PENDING);
+        // Set other order details
+
+        // Save the order to the repository
+        orderRepo.save(order);
         return modelMapper.map(order, OrderDto.class);
+    }
+
+    private String generateUniqueOrderNumber(Long customerId) {
+        DateTimeFormatter timestampFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String timestamp = LocalDateTime.now().format(timestampFormatter);
+        return timestamp + customerId;
+    }
+
+
+    @Override
+    public OrderStatus checkOrderStatus(String orderNumber) {
+        Order order = orderRepo.findOrderByOrderNumber(orderNumber);
+
+        if (order == null) {
+            throw new ResourceException("Order with order number: " + orderNumber + " is not present");
+        }
+        return order.getOrderStatus();
     }
 
 

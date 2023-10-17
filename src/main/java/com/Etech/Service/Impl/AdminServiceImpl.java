@@ -179,7 +179,7 @@ public class AdminServiceImpl implements AdminService {
         toBeUpdated.setFirstName(customerDto.getFirstName());
         toBeUpdated.setLastName(customerDto.getLastName());
         toBeUpdated.setPassword(customerDto.getPassword());
-        toBeUpdated.setRole(customerDto.getRole());
+//        toBeUpdated.setRole(customerDto.getRole());
         toBeUpdated.setPhone(customerDto.getPhone());
         toBeUpdated.setEmail(customerDto.getEmail());
         toBeUpdated.setCustomerStatus(customerDto.getCustomerStatus());

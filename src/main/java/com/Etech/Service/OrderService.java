@@ -3,6 +3,7 @@ package com.Etech.Service;
 import com.Etech.Dto.CustomerDto;
 import com.Etech.Dto.OrderDto;
 import com.Etech.Dto.ProductDto;
+import com.Etech.Model.enums.OrderStatus;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,14 +14,7 @@ public interface OrderService {
 
     public OrderDto cancelOrderByOrderId(long id);
 
-    //public OrderDto addOrder (OrderDto orderDto);
+    public OrderDto placeOrder(Long customerId);
 
-
-   // public OrderDto updateOrder (long id, OrderDto orderDto);
-
-    //public CustomerDto getCustomerByOrderNumber(Long orderNumber);
-
-////////////
-
-    public OrderDto placeOrder(Long customerId, OrderDto orderDto);
+    public OrderStatus checkOrderStatus(String orderNumber);
 }
