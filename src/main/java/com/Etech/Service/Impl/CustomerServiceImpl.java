@@ -12,12 +12,10 @@ import com.Etech.Service.CustomerService;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,15 +35,6 @@ public class CustomerServiceImpl implements CustomerService {
     private ModelMapper modelMapper;
     @Override
     public CustomerDto register(CustomerDto customerDto) {
-        Long customerId = customerDto.getId();
-
-        if (customerId != null) {
-            Optional<Product> toBeAdded = productRepo.findProductById(customerId);
-
-            if (toBeAdded.isPresent()) {
-                throw new ResourceException("Customer with ID " + customerDto.getId() + " already exists", HttpStatus.CONFLICT);
-            }
-        }
         Customer customer = modelMapper.map(customerDto, Customer.class);
         customerRepo.save(customer);
         return modelMapper.map(customer, CustomerDto.class);
@@ -96,24 +85,6 @@ public class CustomerServiceImpl implements CustomerService {
         cartRepo.save(customerCart);
         return modelMapper.map(customerCart, CartDto.class);
     }
-
-    // Simulated method to check the order status based on orderNumber
-//    public String checkOrderStatus(Long customerId) {
-//        Optional<Customer> customer = customerRepo.findCustomersById(customerId);
-//        if (!customer.isPresent()) {
-//            throw new ResourceNotFoundException("Customer not found");
-//        }
-//        Order order = new Order();
-//
-//        order.setOrderNumber(customerId.toString());
-//
-//        // Simulated logic to fetch the order status from your data source
-//        // You can replace this with your actual logic
-//        // For this example, let's assume it returns a status string
-////        return "Order status: [status]";
-//        return customer.get().getOrders()
-//    }
-
 
 
 }

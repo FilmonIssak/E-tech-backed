@@ -35,11 +35,6 @@ public interface AdminService {
     public List<OrderDto> getAllOrdersByDate(String orderDate);
 
     public List<OrderDto> getAllOrders();
-
-    //public CustomerDto getCustomerByOrderNumber(Long orderNumber);
-
-
-    //////////////////////////
     public OrderDto updateOrderStatusToProcessing(Long orderId);
 
     public void deleteOrder(Long orderId);
@@ -48,9 +43,6 @@ public interface AdminService {
 
     public OrderDto updateOrderStatusToShipping(Long orderId);
 
-
-
-    public OrderDto placeOrder(Long customerId, OrderDto orderDto);
 
 
 }

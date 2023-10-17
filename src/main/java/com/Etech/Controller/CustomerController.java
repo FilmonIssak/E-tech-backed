@@ -76,4 +76,11 @@ public class CustomerController {
         }
     }
 
+    @DeleteMapping("{customerId}/cart/product/{productId}")
+    public ResponseEntity<?> deleteProductFromCart(@PathVariable Long customerId, @PathVariable Long productId) {
+        CartDto updatedCart = customerService.deleteProductFromCustomerCart(customerId, productId);
+        return ResponseEntity.status(HttpStatus.OK).body("Deleted");
+    }
+
+
 }

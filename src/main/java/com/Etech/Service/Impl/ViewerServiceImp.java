@@ -31,8 +31,6 @@ public class ViewerServiceImp implements ViewerService {
     @Autowired
     private ViewerRepo viewerRepo;
     @Autowired
-    private CartRepo cartRepo;
-    @Autowired
     private ModelMapper modelMapper;
 
 

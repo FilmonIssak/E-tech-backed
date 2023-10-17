@@ -190,7 +190,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void deleteCustomer(Long id) {
-
         Customer toBeDeleted = customerRepo.findCustomersById(id).orElseThrow(() -> new ResourceException("Customer to be deleted not found"));
         customerRepo.delete(toBeDeleted);
 
@@ -243,7 +242,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public OrderDto updateOrderStatusToDelivery(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
-        order.setOrderStatus(OrderStatus.SUCCESS);
+        order.setOrderStatus(OrderStatus.COMPLETED);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
@@ -252,44 +251,10 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public OrderDto updateOrderStatusToShipping(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
-        order.setOrderStatus(OrderStatus.Shipped);
+        order.setOrderStatus(OrderStatus.SHIPPED);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
-
-    @Override
-    public OrderDto placeOrder(Long customerId, OrderDto orderDto){
-        Customer customer = customerRepo.findById(customerId)
-                .orElseThrow(() -> new ResourceException("Customer not found"));
-
-        Order order = modelMapper.map(orderDto, Order.class);
-        order.setCustomer(customer);
-
-        List<Product> completeProducts = new ArrayList<>();
-        for (Product orderedProduct : order.getProductCartItems()) {
-            Product productFromDb = productRepo.findById(orderedProduct.getId())
-                    .orElseThrow(() -> new ResourceException("Product not found with ID: " + orderedProduct.getId()));
-
-            productFromDb.deductQuantity(orderedProduct.getQuantity());
-
-            if (productFromDb.getQuantity() <= 0) {
-                productFromDb.setProductStatus(ProductStatus.OUTOFSTOCK);
-                productFromDb.setQuantity(0);
-            }
-
-            completeProducts.add(productFromDb);
-            productRepo.save(productFromDb);
-        }
-        order.setProductCartItems(completeProducts);
-
-        if (order.getId() != null) {
-            order = entityManager.merge(order);
-        }
-
-        orderRepository.save(order);
-        return modelMapper.map(order, OrderDto.class);
-    }
-
 
 
 }

@@ -32,13 +32,7 @@ public class OrderServiceImpl implements OrderService {
     private ModelMapper modelMapper;
 
     @Autowired
-    private ProductRepo productRepo;
-
-    @Autowired
     CustomerRepo customerRepo;
-
-    @Autowired
-    private AddressRepo addressRepo;
 
 
     @Override
@@ -82,12 +76,12 @@ public class OrderServiceImpl implements OrderService {
 
                   Order order= orderRepo.findById(id).orElseThrow(()->new ResourceException("No order exists with given OrderId "+ id));
                   if(order.getOrderStatus()== OrderStatus.PENDING) {
-                      order.setOrderStatus(OrderStatus.CANCELED);
+                      order.setOrderStatus(OrderStatus.CANCELLED);
                       orderRepo.save(order);
                       return modelMapper.map(order, OrderDto.class);
                   }
-                  else if(order.getOrderStatus()==OrderStatus.SUCCESS) {
-                      order.setOrderStatus(OrderStatus.CANCELED);
+                  else if(order.getOrderStatus()==OrderStatus.COMPLETED) {
+                      order.setOrderStatus(OrderStatus.CANCELLED);
                       List<Product> productsInCartList= order.getProductCartItems();
 
                       for(Product p : productsInCartList ) {
@@ -106,36 +100,14 @@ public class OrderServiceImpl implements OrderService {
                   }
 
               }
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // get all orders
-//    @Override
-//    public List<OrderDto> getAllOrders() {
-//        List<Order> orders = orderRepository.findAll();
-//        return orders.stream().map(order -> modelMapper.map(order, OrderDto.class)).collect(Collectors.toList());
-//    }
-
-
-
-              ////////////////////
-
     @Override
     public OrderDto placeOrder(Long customerId) {
-        // Generate a unique order number or use a custom logic
         String orderNumber = generateUniqueOrderNumber(customerId);
-
-        // Create a new order entity
         Order order = new Order();
         order.setCustomer(customerRepo.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found")));
         order.setOrderNumber(orderNumber);
-//        order.setOrderDate(Data.));
         order.setOrderStatus(OrderStatus.PENDING);
-        // Set other order details
-
-        // Save the order to the repository
         orderRepo.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
@@ -150,7 +122,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderStatus checkOrderStatus(String orderNumber) {
         Order order = orderRepo.findOrderByOrderNumber(orderNumber);
-
         if (order == null) {
             throw new ResourceException("Order with order number: " + orderNumber + " is not present");
         }
