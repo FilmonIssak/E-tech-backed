@@ -1,7 +1,6 @@
 package com.Etech.Controller;
 
 import com.Etech.Dto.CustomerDto;
-import com.Etech.Model.Customer;
 import com.Etech.Service.CartService;
 import com.Etech.Service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +33,10 @@ public class CustomerController {
         CustomerDto registeredCustomer = customerService.register(customerDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredCustomer);
     }
+
+    // To be changed later
     @GetMapping("cart/findAll")
-    public ResponseEntity<?> viewAllProductsInViewerCart() {
+    public ResponseEntity<?> viewAllProductsInCustomerCart() {
         return ResponseEntity.status(HttpStatus.OK).body(cartService.viewAllProductsInCart());
     }
 

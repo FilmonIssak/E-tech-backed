@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -31,6 +30,7 @@ public class CustomerDto {
     private CreditCard creditCard;
 
     private List<Address> addresses;
+
 
 
 

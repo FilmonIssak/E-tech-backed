@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -38,6 +37,7 @@ public class Customer {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Address> addresses;
+
 
 //    @OneToMany(cascade = CascadeType.ALL)
 //    private List<Order> orders;

@@ -21,11 +21,11 @@ public class Address {
     private String state;
     private String zipCode;
 
-    @ManyToOne
-    private Customer customer;
-
-    @ManyToOne
-    private Admin admin;
+//    @ManyToOne
+//    private Customer customer;
+//
+//    @ManyToOne
+//    private Admin admin;
 
 }
 

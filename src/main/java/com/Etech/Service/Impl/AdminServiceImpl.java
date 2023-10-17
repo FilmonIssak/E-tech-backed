@@ -3,7 +3,6 @@ package com.Etech.Service.Impl;
 import com.Etech.Dto.*;
 import com.Etech.Exception.ResourceException;
 import com.Etech.Model.*;
-import com.Etech.Model.enums.OrderStatus;
 import com.Etech.Model.enums.ProductStatus;
 import com.Etech.Repository.*;
 import com.Etech.Service.AdminService;
@@ -37,9 +36,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private EntityManager entityManager;
-
-
-
 
 
     @Override
@@ -225,7 +221,6 @@ public class AdminServiceImpl implements AdminService {
      */
 
 
-
     @Override
     public OrderDto updateOrderStatusToProcessing(Long orderId, OrderDto orderDto) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
@@ -288,7 +283,5 @@ public class AdminServiceImpl implements AdminService {
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
-
-
 
 }
