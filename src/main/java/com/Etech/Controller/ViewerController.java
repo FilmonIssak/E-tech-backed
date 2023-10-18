@@ -4,6 +4,7 @@ package com.Etech.Controller;
 import com.Etech.Dto.CartDto;
 import com.Etech.Dto.ProductDto;
 import com.Etech.Dto.ViewerDto;
+import com.Etech.Service.CartService;
 import com.Etech.Service.ViewerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,9 @@ public class ViewerController {
 
     @Autowired
     ViewerService viewerService;
+
+    @Autowired
+    CartService cartService;
 
 
     @GetMapping("products/products")

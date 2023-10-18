@@ -5,7 +5,6 @@ import com.Etech.Dto.CustomerDto;
 import com.Etech.Dto.OrderDto;
 import com.Etech.Dto.ProductDto;
 import com.Etech.Exception.ResourceException;
-import com.Etech.Model.Customer;
 import com.Etech.Model.enums.OrderStatus;
 import com.Etech.Service.CustomerService;
 import com.Etech.Service.OrderService;
@@ -26,6 +25,9 @@ public class CustomerController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private CartService cartService;
+
     @GetMapping("findAll")
     public ResponseEntity<?> getAll() {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.getAll());
@@ -40,6 +42,10 @@ public class CustomerController {
     public ResponseEntity<CustomerDto> registerCustomer(@RequestBody CustomerDto customerDto) {
         CustomerDto registeredCustomer = customerService.register(customerDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredCustomer);
+    }
+    @GetMapping("cart/findAll")
+    public ResponseEntity<?> viewAllProductsInViewerCart() {
+        return ResponseEntity.status(HttpStatus.OK).body(cartService.viewAllProductsInCart());
     }
 
 

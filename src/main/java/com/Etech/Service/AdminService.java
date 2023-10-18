@@ -35,13 +35,15 @@ public interface AdminService {
     public List<OrderDto> getAllOrdersByDate(String orderDate);
 
     public List<OrderDto> getAllOrders();
-    public OrderDto updateOrderStatusToProcessing(Long orderId);
+
+  public OrderDto updateOrderStatusToProcessing(Long orderId);
+
 
     public void deleteOrder(Long orderId);
 
-    public OrderDto updateOrderStatusToDelivery(Long orderId);
+    public OrderDto updateOrderStatusToDelivery(Long orderId, OrderDto orderDto);
 
-    public OrderDto updateOrderStatusToShipping(Long orderId);
+    public OrderDto updateOrderStatusToShipping(Long orderId, OrderDto orderDto);
 
 
 

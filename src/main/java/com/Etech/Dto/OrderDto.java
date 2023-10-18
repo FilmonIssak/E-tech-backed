@@ -20,7 +20,6 @@ public class OrderDto {
     private Long id;
     private String orderNumber;
     private Date orderDate;
-
     private String orderTotal;
     private OrderStatus orderStatus;
     private Address address;

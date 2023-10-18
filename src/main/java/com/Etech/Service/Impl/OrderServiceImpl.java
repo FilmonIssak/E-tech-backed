@@ -6,6 +6,7 @@ import com.Etech.Model.Cart;
 import com.Etech.Model.Customer;
 import com.Etech.Model.Order;
 import com.Etech.Model.Product;
+import com.Etech.Model.enums.CustomerStatus;
 import com.Etech.Model.enums.OrderStatus;
 import com.Etech.Model.enums.ProductStatus;
 import com.Etech.Repository.AddressRepo;
@@ -44,36 +45,6 @@ public class OrderServiceImpl implements OrderService {
         return modelMapper.map(toGet, OrderDto.class);
     }
 
-              /**
-             * first we need to create a product and customer
-               **/
-//    @Override
-//    public OrderDto addOrder(OrderDto orderDto) {
-//        Long orderId = orderDto.getId();
-//
-//        if (orderId != null) {
-//            Optional<Order> toBeAdded = orderRepository.findById(orderDto.getId());
-//            if (toBeAdded.isPresent()) {
-//                throw new ResourceException("Order with order id = " + orderDto.getId() + " is already present", HttpStatus.CONFLICT);
-//            }
-//        }
-//       Order order = modelMapper.map(orderDto, Order.class);
-//
-//        Address address = order.getAddress();
-//        if (address.getId() == null) {
-//            address = addressRepository.save(address);
-//
-//            order.setAddress(address);
-//        }
-//
-//        /**
-//         * first we need to create a cart and customer */
-//
-//       orderRepository.save(order);
-//       return modelMapper.map(order, OrderDto.class);
-//    }
-
-
               @Override
               public OrderDto cancelOrderByOrderId(long id) {
 
@@ -103,17 +74,6 @@ public class OrderServiceImpl implements OrderService {
                   }
 
               }
-//    @Override
-//    public OrderDto placeOrder(Long customerId) {
-//        String orderNumber = generateUniqueOrderNumber(customerId);
-//        Order order = new Order();
-//        order.setCustomer(customerRepo.findById(customerId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Customer not found")));
-//        order.setOrderNumber(orderNumber);
-//        order.setOrderStatus(OrderStatus.PENDING);
-//        orderRepo.save(order);
-//        return modelMapper.map(order, OrderDto.class);
-//    }
 
     @Override
     public OrderDto placeOrder(Long customerId) {
@@ -128,31 +88,25 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalStateException("The cart is empty. Cannot place an order with an empty cart.");
         }
 
-        // Create a new order and set its properties
         Order order = new Order();
         order.setOrderNumber(generateUniqueOrderNumber(customerId));
         order.setOrderStatus(OrderStatus.PENDING);
         order.setCustomer(customer);
 
-        // Save the order
         orderRepo.save(order);
 
-        // Remove products from the cart and update the total price
         for (Map.Entry<Product, Integer> entry : customerCart.getProducts().entrySet()) {
             Product product = entry.getKey();
             int quantity = entry.getValue();
-            product.deductQuantity(quantity); // Deduct quantity from the product
+            product.deductQuantity(quantity); 
         }
 
-        // Clear the cart
         customerCart.getProducts().clear();
         customerCart.setTotalPrice(0);
 
-        // Update the customer and the product quantities
         customerRepo.save(customer);
         productRepo.saveAll(customerCart.getProducts().keySet());
 
-        // Return the order DTO
         return modelMapper.map(order, OrderDto.class);
     }
 
