@@ -36,11 +36,8 @@ public interface AdminService {
 
     public List<OrderDto> getAllOrders();
 
-    //public CustomerDto getCustomerByOrderNumber(Long orderNumber);
+  public OrderDto updateOrderStatusToProcessing(Long orderId);
 
-
-    //////////////////////////
-    public OrderDto updateOrderStatusToProcessing(Long orderId, OrderDto orderDto);
 
     public void deleteOrder(Long orderId);
 
@@ -48,9 +45,6 @@ public interface AdminService {
 
     public OrderDto updateOrderStatusToShipping(Long orderId, OrderDto orderDto);
 
-
-
-    public OrderDto placeOrder(Long customerId, OrderDto orderDto);
 
 
 }

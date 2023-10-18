@@ -1,7 +1,6 @@
 package com.Etech.Controller;
 
 import com.Etech.Dto.CustomerDto;
-import com.Etech.Dto.OrderDto;
 import com.Etech.Dto.ProductDto;
 import com.Etech.Service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,8 +137,5 @@ public class AdminController {
     }
 
 
-    @PostMapping("customers/{customerId}/orders")
-    public ResponseEntity<?> placeOrder(@PathVariable Long customerId, @RequestBody OrderDto orderDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.placeOrder(customerId, orderDto));
-    }
+
 }

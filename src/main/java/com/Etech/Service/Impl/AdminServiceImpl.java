@@ -179,7 +179,7 @@ public class AdminServiceImpl implements AdminService {
         toBeUpdated.setFirstName(customerDto.getFirstName());
         toBeUpdated.setLastName(customerDto.getLastName());
         toBeUpdated.setPassword(customerDto.getPassword());
-        toBeUpdated.setRole(customerDto.getRole());
+//        toBeUpdated.setRole(customerDto.getRole());
         toBeUpdated.setPhone(customerDto.getPhone());
         toBeUpdated.setEmail(customerDto.getEmail());
         toBeUpdated.setCustomerStatus(customerDto.getCustomerStatus());
@@ -190,7 +190,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void deleteCustomer(Long id) {
-
         Customer toBeDeleted = customerRepo.findCustomersById(id).orElseThrow(() -> new ResourceException("Customer to be deleted not found"));
         customerRepo.delete(toBeDeleted);
 
@@ -255,40 +254,6 @@ public class AdminServiceImpl implements AdminService {
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
-
-    @Override
-    public OrderDto placeOrder(Long customerId, OrderDto orderDto){
-        Customer customer = customerRepo.findById(customerId)
-                .orElseThrow(() -> new ResourceException("Customer not found"));
-
-        Order order = modelMapper.map(orderDto, Order.class);
-        order.setCustomer(customer);
-
-        List<Product> completeProducts = new ArrayList<>();
-        for (Product orderedProduct : order.getProductCartItems()) {
-            Product productFromDb = productRepo.findById(orderedProduct.getId())
-                    .orElseThrow(() -> new ResourceException("Product not found with ID: " + orderedProduct.getId()));
-
-            productFromDb.deductQuantity(orderedProduct.getQuantity());
-
-            if (productFromDb.getQuantity() <= 0) {
-                productFromDb.setProductStatus(ProductStatus.OUTOFSTOCK);
-                productFromDb.setQuantity(0);
-            }
-
-            completeProducts.add(productFromDb);
-            productRepo.save(productFromDb);
-        }
-        order.setProductCartItems(completeProducts);
-
-        if (order.getId() != null) {
-            order = entityManager.merge(order);
-        }
-
-        orderRepository.save(order);
-        return modelMapper.map(order, OrderDto.class);
-    }
-
 
 
 }

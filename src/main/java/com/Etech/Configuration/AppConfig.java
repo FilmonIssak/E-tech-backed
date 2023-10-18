@@ -19,13 +19,26 @@ import java.util.stream.Collectors;
 @Configuration
 public class AppConfig {
 
-    @Bean
-//    public ModelMapper modelMapper(){
-//        return new ModelMapper();
+//    @Bean
+//    public ModelMapper modelMapper() {
+//        ModelMapper mapper = new ModelMapper();
+//
+//        // Custom mapping from Map<Product, Integer> to List<ProductQuantityDto>
+//        Converter<Map<Product, Integer>, List<ProductQuantityDto>> productMapConverter = ctx -> {
+//            Map<Product, Integer> source = ctx.getSource();
+//            return source.entrySet().stream()
+//                    .map(entry -> new ProductQuantityDto(mapper.map(entry.getKey(), ProductDto.class), entry.getValue()))
+//                    .collect(Collectors.toList());
+//        };
+//
+//        mapper.createTypeMap(Cart.class, CartDto.class)
+//                .addMappings(m -> m.using(productMapConverter).map(Cart::getProducts, CartDto::setProductQuantities));
+//
+//        return mapper;
 //    }
 
 
-
+    @Bean
     public ModelMapper modelMapper() {
         ModelMapper mapper = new ModelMapper();
 
@@ -42,5 +55,4 @@ public class AppConfig {
 
         return mapper;
     }
-
 }

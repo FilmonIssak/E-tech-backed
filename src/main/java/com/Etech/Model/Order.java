@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -20,12 +21,11 @@ public class Order {
     @Id
     @GeneratedValue
     private Long id;
-    private Long orderNumber;
-    private String orderDate;
-    private String orderTime;
+    private String orderNumber;
+    private Date orderDate;
     private Double orderTotal;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
     @ManyToOne
