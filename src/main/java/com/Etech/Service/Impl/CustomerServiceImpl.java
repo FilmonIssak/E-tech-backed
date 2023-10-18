@@ -52,11 +52,11 @@ public class CustomerServiceImpl implements CustomerService {
         return productList.stream().map(product -> modelMapper.map(product,ProductDto.class)).collect(Collectors.toList());
     }
     @Override
-    public CartDto addProductToViewerCart(Long viewerId, Long productId, int quantity) {
-        if (viewerId == null || productId == null) {
+    public CartDto addProductToViewerCart(Long customerId, Long productId, int quantity) {
+        if (customerId == null || productId == null) {
             throw new IllegalArgumentException("customerId or ProductId cannot be null!");
         }
-        Customer customer = customerRepo.findById(viewerId)
+        Customer customer = customerRepo.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException("customer not found"));
         Product product = productRepo.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));

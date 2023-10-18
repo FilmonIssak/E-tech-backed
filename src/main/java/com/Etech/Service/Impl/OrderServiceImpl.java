@@ -2,6 +2,8 @@ package com.Etech.Service.Impl;
 
 import com.Etech.Dto.OrderDto;
 import com.Etech.Exception.ResourceException;
+import com.Etech.Model.Cart;
+import com.Etech.Model.Customer;
 import com.Etech.Model.Order;
 import com.Etech.Model.Product;
 import com.Etech.Model.enums.OrderStatus;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -27,10 +30,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepo orderRepo;
-
     @Autowired
     private ModelMapper modelMapper;
-
+    @Autowired
+    private ProductRepo productRepo;
     @Autowired
     CustomerRepo customerRepo;
 
@@ -100,17 +103,59 @@ public class OrderServiceImpl implements OrderService {
                   }
 
               }
+//    @Override
+//    public OrderDto placeOrder(Long customerId) {
+//        String orderNumber = generateUniqueOrderNumber(customerId);
+//        Order order = new Order();
+//        order.setCustomer(customerRepo.findById(customerId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Customer not found")));
+//        order.setOrderNumber(orderNumber);
+//        order.setOrderStatus(OrderStatus.PENDING);
+//        orderRepo.save(order);
+//        return modelMapper.map(order, OrderDto.class);
+//    }
+
     @Override
     public OrderDto placeOrder(Long customerId) {
-        String orderNumber = generateUniqueOrderNumber(customerId);
+        if (customerId == null) {
+            throw new IllegalArgumentException("customerId cannot be null!");
+        }
+        Customer customer = customerRepo.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+
+        Cart customerCart = customer.getCart();
+        if (customerCart == null || customerCart.getProducts().isEmpty()) {
+            throw new IllegalStateException("The cart is empty. Cannot place an order with an empty cart.");
+        }
+
+        // Create a new order and set its properties
         Order order = new Order();
-        order.setCustomer(customerRepo.findById(customerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found")));
-        order.setOrderNumber(orderNumber);
+        order.setOrderNumber(generateUniqueOrderNumber(customerId));
         order.setOrderStatus(OrderStatus.PENDING);
+        order.setCustomer(customer);
+
+        // Save the order
         orderRepo.save(order);
+
+        // Remove products from the cart and update the total price
+        for (Map.Entry<Product, Integer> entry : customerCart.getProducts().entrySet()) {
+            Product product = entry.getKey();
+            int quantity = entry.getValue();
+            product.deductQuantity(quantity); // Deduct quantity from the product
+        }
+
+        // Clear the cart
+        customerCart.getProducts().clear();
+        customerCart.setTotalPrice(0);
+
+        // Update the customer and the product quantities
+        customerRepo.save(customer);
+        productRepo.saveAll(customerCart.getProducts().keySet());
+
+        // Return the order DTO
         return modelMapper.map(order, OrderDto.class);
     }
+
 
     private String generateUniqueOrderNumber(Long customerId) {
         DateTimeFormatter timestampFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
