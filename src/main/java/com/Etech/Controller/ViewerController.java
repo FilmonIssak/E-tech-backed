@@ -20,9 +20,6 @@ public class ViewerController {
     @Autowired
     ViewerService viewerService;
 
-    @Autowired
-    CartService cartService;
-
 
     @GetMapping("products/products")
     public ResponseEntity<List<ProductDto>> getAllProducts() {

@@ -31,12 +31,12 @@ public interface AdminService {
     public void deleteCustomer(Long id);
 
     /** Order $*/
+    public OrderDto updateOrderStatusToProcessing(Long orderId, OrderDto orderDto);
 
     public List<OrderDto> getAllOrdersByDate(String orderDate);
 
     public List<OrderDto> getAllOrders();
 
-  public OrderDto updateOrderStatusToProcessing(Long orderId);
 
 
     public void deleteOrder(Long orderId);

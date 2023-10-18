@@ -86,5 +86,10 @@ public class CustomerServiceImpl implements CustomerService {
         return modelMapper.map(customerCart, CartDto.class);
     }
 
+    @Override
+    public List<CartDto> viewAllProductsInCart() {
+        List<Cart> productList = cartRepo.findAll();
+        return productList.stream().map(product -> modelMapper.map(product,CartDto.class)).collect(Collectors.toList());
+    }
 
 }

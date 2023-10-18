@@ -14,8 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/v1/customer/")
 public class CustomerController {
@@ -24,9 +22,6 @@ public class CustomerController {
     private CustomerService customerService;
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private CartService cartService;
 
     @GetMapping("findAll")
     public ResponseEntity<?> getAll() {
@@ -44,8 +39,8 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredCustomer);
     }
     @GetMapping("cart/findAll")
-    public ResponseEntity<?> viewAllProductsInViewerCart() {
-        return ResponseEntity.status(HttpStatus.OK).body(cartService.viewAllProductsInCart());
+    public ResponseEntity<?> viewAllProductsInCustomerCart() {
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.viewAllProductsInCart());
     }
 
 
@@ -73,7 +68,7 @@ public class CustomerController {
             OrderStatus orderStatus = orderService.checkOrderStatus(orderNumber);
 
             if (orderStatus != null) {
-                return ResponseEntity.ok("Order status for order number " + orderNumber + ": " + orderStatus.toString());
+                return ResponseEntity.ok("Order status for order number " + orderNumber + ": " + orderStatus);
             } else {
                 return ResponseEntity.notFound().build();
             }
@@ -84,8 +79,8 @@ public class CustomerController {
 
     @DeleteMapping("{customerId}/cart/product/{productId}")
     public ResponseEntity<?> deleteProductFromCart(@PathVariable Long customerId, @PathVariable Long productId) {
-        CartDto updatedCart = customerService.deleteProductFromCustomerCart(customerId, productId);
-        return ResponseEntity.status(HttpStatus.OK).body("Deleted");
+        customerService.deleteProductFromCustomerCart(customerId, productId);
+        return ResponseEntity.status(HttpStatus.OK).body("Product with Id: " +productId + " deleted");
     }
 
 
