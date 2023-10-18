@@ -228,7 +228,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public OrderDto updateOrderStatusToProcessing(Long orderId, OrderDto orderDto) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
-        order.setOrderStatus(orderDto.getOrderStatus());
+        order.setOrderStatus(OrderStatus.PENDING);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
@@ -242,7 +242,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public OrderDto updateOrderStatusToDelivery(Long orderId, OrderDto orderDto) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
-        order.setOrderStatus(orderDto.getOrderStatus());
+        order.setOrderStatus(OrderStatus.DELIVERED);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
@@ -250,7 +250,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public OrderDto updateOrderStatusToShipping(Long orderId, OrderDto orderDto) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
-        order.setOrderStatus(orderDto.getOrderStatus());
+        order.setOrderStatus(OrderStatus.SHIPPED);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
