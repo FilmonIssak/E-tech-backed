@@ -126,9 +126,9 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToDelivery(id, orderDto));
     }
 
-    @PatchMapping("orders/{id}/shipping")
-    public ResponseEntity<?> updateOrderStatusToShipping(@PathVariable Long id, @RequestBody OrderDto orderDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToShipping(id, orderDto));
+    @PatchMapping("orders/{orderNumber}/shipping")
+    public ResponseEntity<?> updateOrderStatusToShipping(@PathVariable String orderNumber, @RequestBody OrderDto orderDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToShipping(orderNumber, orderDto));
     }
 
     @DeleteMapping("orders/{id}")
