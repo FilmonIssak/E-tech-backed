@@ -39,4 +39,6 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK).body(cartService.viewAllProductsInCart());
     }
 
+
+    PostMapping("cart/addProductToCart")
 }
