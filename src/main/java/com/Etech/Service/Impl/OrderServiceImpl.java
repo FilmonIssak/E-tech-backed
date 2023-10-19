@@ -106,14 +106,6 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-<<<<<<< HEAD
-    public OrderDto placeOrder(Long customerId, OrderDto orderDto) {
-        Customer customer = customerRepo.findById(customerId).orElseThrow(() -> new ResourceException("Customer not found"));
-        if(customer.getCustomerStatus() != CustomerStatus.ACTIVE){
-            throw new ResourceException("Customer is not Active and can't place an Order");
-        }
-        Order order = modelMapper.map(orderDto, Order.class);
-=======
     public OrderDto placeOrder(Long customerId) {
         if (customerId == null) {
             throw new IllegalArgumentException("customerId cannot be null!");
@@ -131,7 +123,6 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderDate(LocalDate.from(LocalDateTime.now()));
         order.setOrderTotal(customerCart.getTotalPrice());
         order.setOrderStatus(OrderStatus.PENDING);
->>>>>>> 700cd6dda99c4170ef86cfbc626d4ac96ede9769
         order.setCustomer(customer);
         orderRepo.save(order);
 
@@ -149,6 +140,10 @@ public class OrderServiceImpl implements OrderService {
 
         return modelMapper.map(order, OrderDto.class);
     }
+
+
+
+
 
 
     private String generateUniqueOrderNumber(Long customerId) {
