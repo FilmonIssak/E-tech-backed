@@ -46,9 +46,6 @@ public class OrderServiceImpl implements OrderService {
         return modelMapper.map(toGet, OrderDto.class);
     }
 
-              /**
-             * first we need to create a product and customer
-               **/
 //    @Override
 //    public OrderDto addOrder(OrderDto orderDto) {
 //        Long orderId = orderDto.getId();

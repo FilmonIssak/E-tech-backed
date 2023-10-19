@@ -29,7 +29,6 @@ public class AppConfig {
     public ModelMapper modelMapper() {
         ModelMapper mapper = new ModelMapper();
 
-        // Custom mapping from Map<Product, Integer> to List<ProductQuantityDto>
         Converter<Map<Product, Integer>, List<ProductQuantityDto>> productMapConverter = ctx -> {
             Map<Product, Integer> source = ctx.getSource();
             return source.entrySet().stream()
