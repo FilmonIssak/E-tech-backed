@@ -30,8 +30,8 @@ public class Customer {
     @Enumerated(EnumType.STRING)
     private CustomerStatus customerStatus;
 
-    @ManyToOne
-    private Role role;
+//    @ManyToOne
+//    private Role role;
 
     @Embedded
     private CreditCard creditCard;
@@ -39,8 +39,11 @@ public class Customer {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Address> addresses;
 
-//    @OneToMany(cascade = CascadeType.ALL)
-//    private List<Order> orders;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Order> orders;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Cart cart;
 
 
 }

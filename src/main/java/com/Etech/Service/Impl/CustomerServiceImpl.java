@@ -1,21 +1,22 @@
 package com.Etech.Service.Impl;
 
+import com.Etech.Dto.CartDto;
 import com.Etech.Dto.CustomerDto;
 import com.Etech.Dto.ProductDto;
 import com.Etech.Exception.ResourceException;
-import com.Etech.Model.Customer;
-import com.Etech.Model.Product;
+import com.Etech.Model.*;
+import com.Etech.Repository.CartRepo;
 import com.Etech.Repository.CustomerRepo;
 import com.Etech.Repository.ProductRepo;
 import com.Etech.Service.CustomerService;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,18 +30,12 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepo customerRepo;
 
     @Autowired
+    private CartRepo cartRepo;
+
+    @Autowired
     private ModelMapper modelMapper;
     @Override
     public CustomerDto register(CustomerDto customerDto) {
-        Long customerId = customerDto.getId();
-
-        if (customerId != null) {
-            Optional<Product> toBeAdded = productRepo.findProductById(customerId);
-
-            if (toBeAdded.isPresent()) {
-                throw new ResourceException("Customer with ID " + customerDto.getId() + " already exists", HttpStatus.CONFLICT);
-            }
-        }
         Customer customer = modelMapper.map(customerDto, Customer.class);
         customerRepo.save(customer);
         return modelMapper.map(customer, CustomerDto.class);
@@ -57,7 +52,52 @@ public class CustomerServiceImpl implements CustomerService {
         List<Product> productList = productRepo.findAll();
         return productList.stream().map(product -> modelMapper.map(product,ProductDto.class)).collect(Collectors.toList());
     }
+    @Override
+    public CartDto addProductToViewerCart(Long customerId, Long productId, int quantity) {
+        if (customerId == null || productId == null) {
+            throw new IllegalArgumentException("customerId or ProductId cannot be null!");
+        }
+        Customer customer = customerRepo.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("customer not found"));
+        Product product = productRepo.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
+        Cart customerCart = customer.getCart();
+        if (customerCart == null) {
+            customerCart = new Cart();
+            customer.setCart(customerCart);
+            customerCart.setCustomer(customer);
+        }
 
+        customerCart.addProduct(product, quantity);
+
+        customerRepo.save(customer);
+        customerCart = customer.getCart();
+        return modelMapper.map(customerCart, CartDto.class);
+    }
+
+    @Override
+    public CartDto deleteProductFromCustomerCart(Long customerId, Long productId) {
+        Customer customer = customerRepo.findById(customerId).orElseThrow(() -> new ResourceException("Customer not found"));
+        Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceException("Product not found"));
+        Cart customerCart = customer.getCart();
+        customerCart.removeProduct(product);
+        customerCart.updateTotalPrice();
+        cartRepo.save(customerCart);
+        return modelMapper.map(customerCart, CartDto.class);
+    }
+
+    @Override
+    public List<CartDto> findAllProductCart() {
+        List<Cart> cartList = cartRepo.findAll();
+        List<CartDto> cartDtoList = new ArrayList<>();
+
+        for (Cart cart : cartList) {
+            CartDto cartDto = modelMapper.map(cart, CartDto.class);
+            cartDtoList.add(cartDto);
+        }
+
+        return cartDtoList;
+    }
 
 }

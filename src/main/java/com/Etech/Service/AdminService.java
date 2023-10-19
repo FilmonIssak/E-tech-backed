@@ -46,11 +46,8 @@ public interface AdminService {
 
     public OrderDto updateOrderStatusToDelivery(Long orderId, OrderDto orderDto);
 
-    public OrderDto updateOrderStatusToShipping(Long orderId, OrderDto orderDto);
+    public OrderDto updateOrderStatusToShipping(String orderNumber, OrderDto orderDto);
 
-
-
-    public OrderDto placeOrder(Long customerId, OrderDto orderDto);
 
 
 }

@@ -117,6 +117,7 @@ public class ViewerServiceImp implements ViewerService {
         return modelMapper.map(savedViewer, ViewerDto.class);
     }
 
+    @Override
     public CartDto addProductToViewerCart(Long viewerId, Long productId, int quantity) {
         if (viewerId == null || productId == null) {
             throw new IllegalArgumentException("ViewerId or ProductId cannot be null!");
@@ -150,4 +151,5 @@ public class ViewerServiceImp implements ViewerService {
         cartRepo.save(viewerCart);
         return modelMapper.map(viewerCart, CartDto.class);
     }
+
 }

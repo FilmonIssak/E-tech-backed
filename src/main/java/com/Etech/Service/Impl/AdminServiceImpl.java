@@ -4,7 +4,6 @@ import com.Etech.Dto.*;
 import com.Etech.Exception.ResourceException;
 import com.Etech.Model.*;
 import com.Etech.Model.enums.OrderStatus;
-import com.Etech.Model.enums.ProductStatus;
 import com.Etech.Repository.*;
 import com.Etech.Service.AdminService;
 import org.modelmapper.ModelMapper;
@@ -179,7 +178,7 @@ public class AdminServiceImpl implements AdminService {
         toBeUpdated.setFirstName(customerDto.getFirstName());
         toBeUpdated.setLastName(customerDto.getLastName());
         toBeUpdated.setPassword(customerDto.getPassword());
-        toBeUpdated.setRole(customerDto.getRole());
+//        toBeUpdated.setRole(customerDto.getRole());
         toBeUpdated.setPhone(customerDto.getPhone());
         toBeUpdated.setEmail(customerDto.getEmail());
         toBeUpdated.setCustomerStatus(customerDto.getCustomerStatus());
@@ -190,7 +189,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void deleteCustomer(Long id) {
-
         Customer toBeDeleted = customerRepo.findCustomersById(id).orElseThrow(() -> new ResourceException("Customer to be deleted not found"));
         customerRepo.delete(toBeDeleted);
 
@@ -208,8 +206,32 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<OrderDto> getAllOrders() {
         List<Order> orderList = orderRepository.findAll();
-        return orderList.stream().map(order -> modelMapper.map(order, OrderDto.class)).collect(Collectors.toList());
+
+        return orderList.stream().map(order -> {
+            OrderDto orderDto = new OrderDto();
+            orderDto.setId(order.getId());
+            orderDto.setOrderNumber(order.getOrderNumber());
+            orderDto.setOrderDate(order.getOrderDate());
+            orderDto.setOrderTotal(Double.valueOf(order.getOrderTotal()));
+            orderDto.setOrderStatus(order.getOrderStatus());
+
+            CustomerDto customerDto = new CustomerDto();
+            customerDto.setFirstName(order.getCustomer().getFirstName());
+            customerDto.setLastName(order.getCustomer().getLastName());
+            customerDto.setPhone(order.getCustomer().getPhone());
+            customerDto.setEmail(order.getCustomer().getEmail());
+            customerDto.setCustomerStatus(order.getCustomer().getCustomerStatus());
+            customerDto.setDateOfRegistration(order.getCustomer().getDateOfRegistration());
+            customerDto.setId(order.getCustomer().getId());
+
+
+            orderDto.setCustomer(customerDto);
+
+            return orderDto;
+        }).collect(Collectors.toList());
     }
+
+
 
 
     /**
@@ -243,52 +265,23 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public OrderDto updateOrderStatusToDelivery(Long orderId, OrderDto orderDto) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
-        order.setOrderStatus(orderDto.getOrderStatus());
+        order.setOrderStatus(OrderStatus.COMPLETED);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
+
+
 
     @Override
-    public OrderDto updateOrderStatusToShipping(Long orderId, OrderDto orderDto) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
-        order.setOrderStatus(orderDto.getOrderStatus());
+    public OrderDto updateOrderStatusToShipping(String orderNumber, OrderDto orderDto){
+        Order order = orderRepository.findOrderByOrderNumber(orderNumber);
+        if (order == null) {
+            throw new ResourceException("Order with order number " + orderNumber + " not found");
+        }
+        order.setOrderStatus(OrderStatus.SHIPPED);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
-
-    @Override
-    public OrderDto placeOrder(Long customerId, OrderDto orderDto){
-        Customer customer = customerRepo.findById(customerId)
-                .orElseThrow(() -> new ResourceException("Customer not found"));
-
-        Order order = modelMapper.map(orderDto, Order.class);
-        order.setCustomer(customer);
-
-        List<Product> completeProducts = new ArrayList<>();
-        for (Product orderedProduct : order.getProductCartItems()) {
-            Product productFromDb = productRepo.findById(orderedProduct.getId())
-                    .orElseThrow(() -> new ResourceException("Product not found with ID: " + orderedProduct.getId()));
-
-            productFromDb.deductQuantity(orderedProduct.getQuantity());
-
-            if (productFromDb.getQuantity() <= 0) {
-                productFromDb.setProductStatus(ProductStatus.OUTOFSTOCK);
-                productFromDb.setQuantity(0);
-            }
-
-            completeProducts.add(productFromDb);
-            productRepo.save(productFromDb);
-        }
-        order.setProductCartItems(completeProducts);
-
-        if (order.getId() != null) {
-            order = entityManager.merge(order);
-        }
-
-        orderRepository.save(order);
-        return modelMapper.map(order, OrderDto.class);
-    }
-
 
 
 }

@@ -26,11 +26,11 @@ public class CustomerDto {
     private LocalDate dateOfRegistration;
 
     private CustomerStatus customerStatus;
-    private Role role;
+//    private Role role;
 
     private CreditCard creditCard;
 
-    private List<Address> addresses;
+//    private List<Address> addresses;
 
 
 

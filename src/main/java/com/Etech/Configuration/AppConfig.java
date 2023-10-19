@@ -20,12 +20,6 @@ import java.util.stream.Collectors;
 public class AppConfig {
 
     @Bean
-//    public ModelMapper modelMapper(){
-//        return new ModelMapper();
-//    }
-
-
-
     public ModelMapper modelMapper() {
         ModelMapper mapper = new ModelMapper();
 
@@ -41,5 +35,4 @@ public class AppConfig {
 
         return mapper;
     }
-
 }

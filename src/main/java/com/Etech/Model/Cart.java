@@ -29,18 +29,16 @@ public class Cart {
     @Column(name = "quantity")
     private Map<Product, Integer> products = new HashMap<>();
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    private Customer customer;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Customer customer;
 
-    @OneToOne(mappedBy = "cart")
+    @OneToOne
     private Viewer viewer;
 
     public void addProduct(Product product, int quantity) {
         products.merge(product, quantity, Integer::sum);
         updateTotalPrice();
     }
-
-
     public void updateTotalPrice() {
         this.totalPrice = products.entrySet().stream()
                 .mapToDouble(entry -> entry.getKey().getPrice() * entry.getValue())
@@ -50,9 +48,7 @@ public class Cart {
         products.remove(product);
     }
 
-    public void setViewer(Viewer viewer) {
-        this.viewer = viewer;
-    }
+
 
 
 
