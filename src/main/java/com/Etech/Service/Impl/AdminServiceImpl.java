@@ -213,6 +213,7 @@ public class AdminServiceImpl implements AdminService {
             orderDto.setOrderNumber(order.getOrderNumber());
             orderDto.setOrderDate(order.getOrderDate());
             orderDto.setOrderTotal(Double.valueOf(order.getOrderTotal()));
+            orderDto.setOrderTime(order.getOrderTime());
             orderDto.setOrderStatus(order.getOrderStatus());
 
             CustomerDto customerDto = new CustomerDto();

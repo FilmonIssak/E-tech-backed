@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -121,6 +122,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setOrderNumber(generateUniqueOrderNumber(customerId));
         order.setOrderDate(LocalDate.from(LocalDateTime.now()));
+        order.setOrderTime(LocalTime.from(LocalDateTime.now()));
         order.setOrderTotal(customerCart.getTotalPrice());
         order.setOrderStatus(OrderStatus.PENDING);
         order.setCustomer(customer);
@@ -137,6 +139,7 @@ public class OrderServiceImpl implements OrderService {
 
         customerRepo.save(customer);
         productRepo.saveAll(customerCart.getProducts().keySet());
+        System.out.println("OrderTime (before returning): " + order.getOrderTime());
 
         return modelMapper.map(order, OrderDto.class);
     }

@@ -7,7 +7,9 @@ import com.Etech.Model.Product;
 import com.Etech.Model.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 
+import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,9 +23,9 @@ public class OrderDto {
 
     private Long id;
     private String orderNumber;
-    private String orderTime;
     private Double orderTotal;
     private LocalDate orderDate;
+    private LocalTime orderTime;
     private OrderStatus orderStatus;
     private Address address;
     private List<Product> productCartItems;
