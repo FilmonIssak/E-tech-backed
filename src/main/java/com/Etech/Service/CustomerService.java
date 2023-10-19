@@ -11,10 +11,14 @@ import java.util.List;
 public interface CustomerService {
 
     public List<CustomerDto> getAll();
+
     public CustomerDto register(CustomerDto customerDto);
+
     public List<ProductDto> findAll();
 
     public CartDto addProductToViewerCart(Long viewerId, Long productId, int quantity);
+
     public CartDto deleteProductFromCustomerCart(Long customerId, Long productId);
 
+    public List<CartDto> findAllProductCart();
 }

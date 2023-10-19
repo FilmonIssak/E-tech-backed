@@ -1,6 +1,7 @@
 package com.Etech.Controller;
 
 import com.Etech.Dto.CustomerDto;
+import com.Etech.Dto.OrderDto;
 import com.Etech.Dto.ProductDto;
 import com.Etech.Service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,9 +126,9 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToDelivery(id));
     }
 
-    @PatchMapping("orders/{id}/shipping")
-    public ResponseEntity<?> updateOrderStatusToShipping(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToShipping(id));
+    @PatchMapping("orders/{orderNumber}/shipping")
+    public ResponseEntity<?> updateOrderStatusToShipping(@PathVariable String orderNumber, OrderDto orderDto){
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToShipping(orderNumber, orderDto));
     }
 
     @DeleteMapping("orders/{id}")

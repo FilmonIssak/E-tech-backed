@@ -19,10 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -103,17 +105,7 @@ public class OrderServiceImpl implements OrderService {
                   }
 
               }
-//    @Override
-//    public OrderDto placeOrder(Long customerId) {
-//        String orderNumber = generateUniqueOrderNumber(customerId);
-//        Order order = new Order();
-//        order.setCustomer(customerRepo.findById(customerId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Customer not found")));
-//        order.setOrderNumber(orderNumber);
-//        order.setOrderStatus(OrderStatus.PENDING);
-//        orderRepo.save(order);
-//        return modelMapper.map(order, OrderDto.class);
-//    }
+
 
     @Override
     public OrderDto placeOrder(Long customerId) {
@@ -128,31 +120,26 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalStateException("The cart is empty. Cannot place an order with an empty cart.");
         }
 
-        // Create a new order and set its properties
         Order order = new Order();
         order.setOrderNumber(generateUniqueOrderNumber(customerId));
+        order.setOrderDate(LocalDate.from(LocalDateTime.now()));
+        order.setOrderTotal(customerCart.getTotalPrice());
         order.setOrderStatus(OrderStatus.PENDING);
         order.setCustomer(customer);
-
-        // Save the order
         orderRepo.save(order);
 
-        // Remove products from the cart and update the total price
         for (Map.Entry<Product, Integer> entry : customerCart.getProducts().entrySet()) {
             Product product = entry.getKey();
             int quantity = entry.getValue();
-            product.deductQuantity(quantity); // Deduct quantity from the product
+            product.deductQuantity(quantity);
         }
 
-        // Clear the cart
         customerCart.getProducts().clear();
         customerCart.setTotalPrice(0);
 
-        // Update the customer and the product quantities
         customerRepo.save(customer);
         productRepo.saveAll(customerCart.getProducts().keySet());
 
-        // Return the order DTO
         return modelMapper.map(order, OrderDto.class);
     }
 
@@ -172,6 +159,8 @@ public class OrderServiceImpl implements OrderService {
         }
         return order.getOrderStatus();
     }
+
+
 
 
 }

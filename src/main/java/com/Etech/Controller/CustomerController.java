@@ -82,5 +82,9 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK).body("Deleted");
     }
 
+    @GetMapping("findAllProductCart")
+    public ResponseEntity<?> findAllProductCart() {
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.findAllProductCart());
+    }
 
 }

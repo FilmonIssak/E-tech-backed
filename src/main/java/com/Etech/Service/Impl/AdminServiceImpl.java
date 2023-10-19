@@ -207,8 +207,32 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<OrderDto> getAllOrders() {
         List<Order> orderList = orderRepository.findAll();
-        return orderList.stream().map(order -> modelMapper.map(order, OrderDto.class)).collect(Collectors.toList());
+
+        return orderList.stream().map(order -> {
+            OrderDto orderDto = new OrderDto();
+            orderDto.setId(order.getId());
+            orderDto.setOrderNumber(order.getOrderNumber());
+            orderDto.setOrderDate(order.getOrderDate());
+            orderDto.setOrderTotal(String.valueOf(order.getOrderTotal()));
+            orderDto.setOrderStatus(order.getOrderStatus());
+
+            CustomerDto customerDto = new CustomerDto();
+            customerDto.setFirstName(order.getCustomer().getFirstName());
+            customerDto.setLastName(order.getCustomer().getLastName());
+            customerDto.setPhone(order.getCustomer().getPhone());
+            customerDto.setEmail(order.getCustomer().getEmail());
+            customerDto.setCustomerStatus(order.getCustomer().getCustomerStatus());
+            customerDto.setDateOfRegistration(order.getCustomer().getDateOfRegistration());
+            customerDto.setId(order.getCustomer().getId());
+
+
+            orderDto.setCustomer(customerDto);
+
+            return orderDto;
+        }).collect(Collectors.toList());
     }
+
+
 
 
     /**
@@ -249,8 +273,11 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public OrderDto updateOrderStatusToShipping(Long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
+    public OrderDto updateOrderStatusToShipping(String orderNumber, OrderDto orderDto){
+        Order order = orderRepository.findOrderByOrderNumber(orderNumber);
+        if (order == null) {
+            throw new ResourceException("Order with order number " + orderNumber + " not found");
+        }
         order.setOrderStatus(OrderStatus.SHIPPED);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,5 +87,17 @@ public class CustomerServiceImpl implements CustomerService {
         return modelMapper.map(customerCart, CartDto.class);
     }
 
+    @Override
+    public List<CartDto> findAllProductCart() {
+        List<Cart> cartList = cartRepo.findAll();
+        List<CartDto> cartDtoList = new ArrayList<>();
+
+        for (Cart cart : cartList) {
+            CartDto cartDto = modelMapper.map(cart, CartDto.class);
+            cartDtoList.add(cartDto);
+        }
+
+        return cartDtoList;
+    }
 
 }
