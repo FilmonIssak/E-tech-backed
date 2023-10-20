@@ -48,7 +48,7 @@ public class ViewerServiceImp implements ViewerService {
     }
 
     @Override
-    public List<ProductDto> findAllByCatagory(String category) throws RuntimeException {
+    public List<ProductDto> findAllByCategory(String category) throws RuntimeException {
         ProductCategory productCategory;
         try {
              productCategory = ProductCategory.valueOf(category.toUpperCase());
@@ -151,4 +151,5 @@ public class ViewerServiceImp implements ViewerService {
         cartRepo.save(viewerCart);
         return modelMapper.map(viewerCart, CartDto.class);
     }
+
 }

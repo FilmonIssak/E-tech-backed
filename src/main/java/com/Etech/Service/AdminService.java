@@ -37,8 +37,6 @@ public interface AdminService {
 
     public List<OrderDto> getAllOrders();
 
-
-
     public void deleteOrder(Long orderId);
 
     public OrderDto updateOrderStatusToDelivery(String orderNumber, OrderDto orderDto);

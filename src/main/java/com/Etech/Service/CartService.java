@@ -7,5 +7,6 @@ import com.Etech.Model.Product;
 import java.util.List;
 
 public interface CartService {
+    public List<CartDto> viewAllProductsInCart();
 
 }

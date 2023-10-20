@@ -19,7 +19,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -47,9 +46,36 @@ public class OrderServiceImpl implements OrderService {
         return modelMapper.map(toGet, OrderDto.class);
     }
 
-    @Override
-    public OrderDto cancelOrderByOrderId(long id) {
 
+//    @Override
+//    public OrderDto addOrder(OrderDto orderDto) {
+//        Long orderId = orderDto.getId();
+//
+//        if (orderId != null) {
+//            Optional<Order> toBeAdded = orderRepository.findById(orderDto.getId());
+//            if (toBeAdded.isPresent()) {
+//                throw new ResourceException("Order with order id = " + orderDto.getId() + " is already present", HttpStatus.CONFLICT);
+//            }
+//        }
+//       Order order = modelMapper.map(orderDto, Order.class);
+//
+//        Address address = order.getAddress();
+//        if (address.getId() == null) {
+//            address = addressRepository.save(address);
+//
+//            order.setAddress(address);
+//        }
+//
+//        /**
+//         * first we need to create a cart and customer */
+//
+//       orderRepository.save(order);
+//       return modelMapper.map(order, OrderDto.class);
+//    }
+
+
+        @Override
+        public OrderDto cancelOrderByOrderId(long id) {
         Order order= orderRepo.findById(id).orElseThrow(()->new ResourceException("No order exists with given OrderId "+ id));
         if(order.getOrderStatus()== OrderStatus.PENDING) {
             order.setOrderStatus(OrderStatus.CANCELLED);
@@ -116,6 +142,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+
+
+
+
+
     private String generateUniqueOrderNumber(Long customerId) {
         DateTimeFormatter timestampFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String timestamp = LocalDateTime.now().format(timestampFormatter);
@@ -131,6 +162,8 @@ public class OrderServiceImpl implements OrderService {
         }
         return order.getOrderStatus();
     }
+
+
 
 
 }

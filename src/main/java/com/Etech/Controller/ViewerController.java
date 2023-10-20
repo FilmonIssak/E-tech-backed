@@ -20,6 +20,9 @@ public class ViewerController {
     @Autowired
     ViewerService viewerService;
 
+    @Autowired
+    CartService cartService;
+
 
     @GetMapping("products/products")
     public ResponseEntity<List<ProductDto>> getAllProducts() {
@@ -33,7 +36,7 @@ public class ViewerController {
 
     @GetMapping("products/searchByCategory/{category}")
     public ResponseEntity<List<ProductDto>> findProductsByCategory(@PathVariable("category") String category) {
-        return ResponseEntity.status(HttpStatus.OK).body(viewerService.findAllByCatagory(category));
+        return ResponseEntity.status(HttpStatus.OK).body(viewerService.findAllByCategory(category));
     }
 
     @GetMapping("products/searchByKeyword/{keyword}")
@@ -56,5 +59,22 @@ public class ViewerController {
             ViewerDto registeredViewer = viewerService.register(viewerDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(registeredViewer);
         }
+
+        @PostMapping("viewer/{viewerId}/cart")
+        public ResponseEntity<CartDto> addProductToCart(@PathVariable Long viewerId, @RequestBody ProductDto productDto) {
+            CartDto updatedCart = viewerService.addProductToViewerCart(viewerId, productDto.getId(), productDto.getQuantity());
+            return ResponseEntity.status(HttpStatus.OK).body(updatedCart);
+        }
+
+
+        @DeleteMapping("viewer/{viewerId}/cart/product/{productId}")
+        public ResponseEntity<?> deleteProductFromCartForViewer(@PathVariable Long viewerId, @PathVariable Long productId) {
+            return ResponseEntity.status(HttpStatus.OK).body(viewerService.deleteProductFromCartForViewer(viewerId, productId));
+        }
+
+    @GetMapping("cart/findAll")
+    public ResponseEntity<?> viewAllProductsInViewerCart() {
+        return ResponseEntity.status(HttpStatus.OK).body(cartService.viewAllProductsInCart());
+    }
 
 }

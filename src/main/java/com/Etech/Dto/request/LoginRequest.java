@@ -7,9 +7,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class LoginRequest {
-    private String username;
+    private String email;
     private String password;
+
+    @Override
+    public String toString() {
+        return "{\"username\":\"" + email + "\", \"password\":\"" + password + "\"}";
+    }
 }
