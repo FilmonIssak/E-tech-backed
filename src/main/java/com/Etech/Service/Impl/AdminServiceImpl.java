@@ -4,7 +4,6 @@ import com.Etech.Dto.*;
 import com.Etech.Exception.ResourceException;
 import com.Etech.Model.*;
 import com.Etech.Model.enums.OrderStatus;
-import com.Etech.Model.enums.ProductStatus;
 import com.Etech.Repository.*;
 import com.Etech.Service.AdminService;
 import org.modelmapper.ModelMapper;
@@ -207,53 +206,70 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<OrderDto> getAllOrders() {
         List<Order> orderList = orderRepository.findAll();
-        return orderList.stream().map(order -> modelMapper.map(order, OrderDto.class)).collect(Collectors.toList());
+
+        return orderList.stream().map(order -> {
+            OrderDto orderDto = new OrderDto();
+            orderDto.setId(order.getId());
+            orderDto.setOrderNumber(order.getOrderNumber());
+            orderDto.setOrderDate(order.getOrderDate());
+            orderDto.setOrderTotal(Double.valueOf(order.getOrderTotal()));
+            orderDto.setOrderTime(order.getOrderTime());
+            orderDto.setOrderStatus(order.getOrderStatus());
+
+            CustomerDto customerDto = new CustomerDto();
+            customerDto.setFirstName(order.getCustomer().getFirstName());
+            customerDto.setLastName(order.getCustomer().getLastName());
+            customerDto.setPhone(order.getCustomer().getPhone());
+            customerDto.setEmail(order.getCustomer().getEmail());
+            customerDto.setCustomerStatus(order.getCustomer().getCustomerStatus());
+            customerDto.setDateOfRegistration(order.getCustomer().getDateOfRegistration());
+            customerDto.setId(order.getCustomer().getId());
+
+
+            orderDto.setCustomer(customerDto);
+
+            return orderDto;
+        }).collect(Collectors.toList());
     }
-
-
-    /**
-     * @Author: Filmon Issak check it out and will discuss it later
-     * Those are the new implemented methods
-     * @method updateOrderStatusToProcessing
-     * @method deleteOrder
-     * @method updateOrderStatusToDelivery
-     * @method updateOrderStatusToShipping
-     * @method addProductToCartForViewer
-     * @method deleteProductFromCartForViewer
-     * @method placeOrder
-     */
-
-
-
-    @Override
-    public OrderDto updateOrderStatusToProcessing(Long orderId, OrderDto orderDto) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
-        order.setOrderStatus(OrderStatus.PENDING);
-        orderRepository.save(order);
-        return modelMapper.map(order, OrderDto.class);
-    }
-
+ 
     @Override
     public void deleteOrder(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order to be deleted not found"));
         orderRepository.delete(order);
     }
-
-    @Override
-    public OrderDto updateOrderStatusToDelivery(Long orderId, OrderDto orderDto) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
-        order.setOrderStatus(orderDto.getOrderStatus());
+  
+     @Override
+    public OrderDto updateOrderStatusToProcessing(String orderNumber, OrderDto orderDto) {
+         Order order = orderRepository.findById(orderId);
+        if (order == null) {
+            throw new ResourceException("Order with order number " + orderNumber + " not found");
+        }
+        order.setOrderStatus(OrderStatus.PENDING);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
 
+
     @Override
-    public OrderDto updateOrderStatusToShipping(String orderNumber, OrderDto orderDto) {
-        var order = orderRepository.findOrderByOrderNumber(orderNumber);
+    public OrderDto updateOrderStatusToDelivery(String orderNumber, OrderDto orderDto) {
+        Order order = orderRepository.findById(orderId);
         if (order == null) {
-            throw new ResourceException("Order with order number: " + orderNumber + " is not present", HttpStatus.NOT_FOUND);
+            throw new ResourceException("Order with order number " + orderNumber + " not found");
         }
-        order.setOrderStatus(orderDto.getOrderStatus());
+        order.setOrderStatus(OrderStatus.COMPLETED);
+        orderRepository.save(order);
+        return modelMapper.map(order, OrderDto.class);
+    }
+
+
+
+    @Override
+    public OrderDto updateOrderStatusToShipping(String orderNumber, OrderDto orderDto){
+        Order order = orderRepository.findOrderByOrderNumber(orderNumber);
+        if (order == null) {
+            throw new ResourceException("Order with order number " + orderNumber + " not found");
+        }
+        order.setOrderStatus(OrderStatus.SHIPPED);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }

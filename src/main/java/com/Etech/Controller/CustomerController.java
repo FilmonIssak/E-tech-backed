@@ -5,6 +5,7 @@ import com.Etech.Dto.CustomerDto;
 import com.Etech.Dto.OrderDto;
 import com.Etech.Dto.ProductDto;
 import com.Etech.Exception.ResourceException;
+import com.Etech.Service.CartService;
 import com.Etech.Model.enums.OrderStatus;
 import com.Etech.Service.CustomerService;
 import com.Etech.Service.OrderService;
@@ -14,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("/api/v1/customer/")
 public class CustomerController {
@@ -22,6 +24,9 @@ public class CustomerController {
     private CustomerService customerService;
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private CartService cartService;
 
     @GetMapping("findAll")
     public ResponseEntity<?> getAll() {
@@ -39,8 +44,8 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredCustomer);
     }
     @GetMapping("cart/findAll")
-    public ResponseEntity<?> viewAllProductsInCustomerCart() {
-        return ResponseEntity.status(HttpStatus.OK).body(customerService.viewAllProductsInCart());
+    public ResponseEntity<?> viewAllProductsInViewerCart() {
+        return ResponseEntity.status(HttpStatus.OK).body(cartService.viewAllProductsInCart());
     }
 
 
@@ -83,5 +88,9 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK).body("Product with Id: " +productId + " deleted");
     }
 
+    @GetMapping("findAllProductCart")
+    public ResponseEntity<?> findAllProductCart() {
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.findAllProductCart());
+    }
 
 }

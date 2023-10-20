@@ -19,11 +19,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -45,7 +47,34 @@ public class OrderServiceImpl implements OrderService {
         return modelMapper.map(toGet, OrderDto.class);
     }
 
-              @Override
+//    @Override
+//    public OrderDto addOrder(OrderDto orderDto) {
+//        Long orderId = orderDto.getId();
+//
+//        if (orderId != null) {
+//            Optional<Order> toBeAdded = orderRepository.findById(orderDto.getId());
+//            if (toBeAdded.isPresent()) {
+//                throw new ResourceException("Order with order id = " + orderDto.getId() + " is already present", HttpStatus.CONFLICT);
+//            }
+//        }
+//       Order order = modelMapper.map(orderDto, Order.class);
+//
+//        Address address = order.getAddress();
+//        if (address.getId() == null) {
+//            address = addressRepository.save(address);
+//
+//            order.setAddress(address);
+//        }
+//
+//        /**
+//         * first we need to create a cart and customer */
+//
+//       orderRepository.save(order);
+//       return modelMapper.map(order, OrderDto.class);
+//    }
+
+
+@Override
               public OrderDto cancelOrderByOrderId(long id) {
 
                   Order order= orderRepo.findById(id).orElseThrow(()->new ResourceException("No order exists with given OrderId "+ id));
@@ -90,15 +119,17 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = new Order();
         order.setOrderNumber(generateUniqueOrderNumber(customerId));
+        order.setOrderDate(LocalDate.from(LocalDateTime.now()));
+        order.setOrderTime(LocalTime.from(LocalDateTime.now()));
+        order.setOrderTotal(customerCart.getTotalPrice());
         order.setOrderStatus(OrderStatus.PENDING);
         order.setCustomer(customer);
-
         orderRepo.save(order);
 
         for (Map.Entry<Product, Integer> entry : customerCart.getProducts().entrySet()) {
             Product product = entry.getKey();
             int quantity = entry.getValue();
-            product.deductQuantity(quantity); 
+            product.deductQuantity(quantity);
         }
 
         customerCart.getProducts().clear();
@@ -106,9 +137,15 @@ public class OrderServiceImpl implements OrderService {
 
         customerRepo.save(customer);
         productRepo.saveAll(customerCart.getProducts().keySet());
+        System.out.println("OrderTime (before returning): " + order.getOrderTime());
 
         return modelMapper.map(order, OrderDto.class);
     }
+
+
+
+
+
 
 
     private String generateUniqueOrderNumber(Long customerId) {
@@ -126,6 +163,8 @@ public class OrderServiceImpl implements OrderService {
         }
         return order.getOrderStatus();
     }
+
+
 
 
 }

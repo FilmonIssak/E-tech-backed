@@ -37,11 +37,12 @@ public interface AdminService {
 
     public List<OrderDto> getAllOrders();
 
-
+  
+    public OrderDto updateOrderStatusToProcessing(String orderNumber, OrderDto orderDto);
 
     public void deleteOrder(Long orderId);
 
-    public OrderDto updateOrderStatusToDelivery(Long orderId, OrderDto orderDto);
+    public OrderDto updateOrderStatusToDelivery(String orderNumber, OrderDto orderDto);
 
     public OrderDto updateOrderStatusToShipping(String orderNumber, OrderDto orderDto);
 

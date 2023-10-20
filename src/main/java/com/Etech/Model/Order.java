@@ -2,11 +2,15 @@ package com.Etech.Model;
 
 
 import com.Etech.Model.enums.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
@@ -22,8 +26,10 @@ public class Order {
     @GeneratedValue
     private Long id;
     private String orderNumber;
-    private Date orderDate;
     private Double orderTotal;
+    private LocalDate orderDate;
+    @JsonFormat(pattern = "HH:mm:ss")
+    private LocalTime orderTime;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
