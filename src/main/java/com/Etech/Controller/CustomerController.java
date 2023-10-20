@@ -73,7 +73,7 @@ public class CustomerController {
             OrderStatus orderStatus = orderService.checkOrderStatus(orderNumber);
 
             if (orderStatus != null) {
-                return ResponseEntity.ok("Order status for order number " + orderNumber + ": " + orderStatus.toString());
+                return ResponseEntity.ok("Order status for order number " + orderNumber + ": " + orderStatus);
             } else {
                 return ResponseEntity.notFound().build();
             }
@@ -84,8 +84,8 @@ public class CustomerController {
 
     @DeleteMapping("{customerId}/cart/product/{productId}")
     public ResponseEntity<?> deleteProductFromCart(@PathVariable Long customerId, @PathVariable Long productId) {
-        CartDto updatedCart = customerService.deleteProductFromCustomerCart(customerId, productId);
-        return ResponseEntity.status(HttpStatus.OK).body("Deleted");
+        customerService.deleteProductFromCustomerCart(customerId, productId);
+        return ResponseEntity.status(HttpStatus.OK).body("Product with Id: " +productId + " deleted");
     }
 
     @GetMapping("findAllProductCart")

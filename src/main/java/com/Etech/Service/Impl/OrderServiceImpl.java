@@ -19,7 +19,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -75,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
 //    }
 
 
-              @Override
+@Override
               public OrderDto cancelOrderByOrderId(long id) {
 
                   Order order= orderRepo.findById(id).orElseThrow(()->new ResourceException("No order exists with given OrderId "+ id));
@@ -104,7 +103,6 @@ public class OrderServiceImpl implements OrderService {
                   }
 
               }
-
 
     @Override
     public OrderDto placeOrder(Long customerId) {
@@ -143,6 +141,7 @@ public class OrderServiceImpl implements OrderService {
 
         return modelMapper.map(order, OrderDto.class);
     }
+
 
 
 

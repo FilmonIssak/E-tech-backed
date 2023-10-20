@@ -231,41 +231,31 @@ public class AdminServiceImpl implements AdminService {
             return orderDto;
         }).collect(Collectors.toList());
     }
-
-
-
-
-    /**
-     * @Author: Filmon Issak check it out and will discuss it later
-     * Those are the new implemented methods
-     * @method updateOrderStatusToProcessing
-     * @method deleteOrder
-     * @method updateOrderStatusToDelivery
-     * @method updateOrderStatusToShipping
-     * @method addProductToCartForViewer
-     * @method deleteProductFromCartForViewer
-     * @method placeOrder
-     */
-
-
-
-    @Override
-    public OrderDto updateOrderStatusToProcessing(Long orderId, OrderDto orderDto) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
-        order.setOrderStatus(orderDto.getOrderStatus());
-        orderRepository.save(order);
-        return modelMapper.map(order, OrderDto.class);
-    }
-
+ 
     @Override
     public void deleteOrder(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order to be deleted not found"));
         orderRepository.delete(order);
     }
+  
+     @Override
+    public OrderDto updateOrderStatusToProcessing(String orderNumber, OrderDto orderDto) {
+         Order order = orderRepository.findById(orderId);
+        if (order == null) {
+            throw new ResourceException("Order with order number " + orderNumber + " not found");
+        }
+        order.setOrderStatus(OrderStatus.PENDING);
+        orderRepository.save(order);
+        return modelMapper.map(order, OrderDto.class);
+    }
+
 
     @Override
-    public OrderDto updateOrderStatusToDelivery(Long orderId, OrderDto orderDto) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
+    public OrderDto updateOrderStatusToDelivery(String orderNumber, OrderDto orderDto) {
+        Order order = orderRepository.findById(orderId);
+        if (order == null) {
+            throw new ResourceException("Order with order number " + orderNumber + " not found");
+        }
         order.setOrderStatus(OrderStatus.COMPLETED);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
