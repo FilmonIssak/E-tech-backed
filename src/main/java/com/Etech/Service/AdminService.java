@@ -31,7 +31,7 @@ public interface AdminService {
     public void deleteCustomer(Long id);
 
     /** Order $*/
-    public OrderDto updateOrderStatusToProcessing(Long orderId, OrderDto orderDto);
+    public OrderDto updateOrderStatusToProcessing(String orderNumber, OrderDto orderDto);
 
     public List<OrderDto> getAllOrdersByDate(String orderDate);
 
@@ -41,7 +41,7 @@ public interface AdminService {
 
     public void deleteOrder(Long orderId);
 
-    public OrderDto updateOrderStatusToDelivery(Long orderId, OrderDto orderDto);
+    public OrderDto updateOrderStatusToDelivery(String orderNumber, OrderDto orderDto);
 
     public OrderDto updateOrderStatusToShipping(String orderNumber, OrderDto orderDto);
 

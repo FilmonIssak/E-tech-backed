@@ -226,9 +226,12 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public OrderDto updateOrderStatusToProcessing(Long orderId, OrderDto orderDto) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
-        order.setOrderStatus(OrderStatus.PENDING);
+    public OrderDto updateOrderStatusToProcessing(String orderNumber, OrderDto orderDto) {
+        Order order = orderRepository.findOrderByOrderNumber(orderNumber);
+        if (order == null) {
+            throw new ResourceException("Order with order number: " + orderNumber + " is not present", HttpStatus.NOT_FOUND);
+        }
+        order.setOrderStatus(orderDto.getOrderStatus());
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
@@ -240,8 +243,11 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public OrderDto updateOrderStatusToDelivery(Long orderId, OrderDto orderDto) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order with id: " + orderId + " is not present", HttpStatus.NOT_FOUND));
+    public OrderDto updateOrderStatusToDelivery(String orderNumber, OrderDto orderDto) {
+        Order order = orderRepository.findOrderByOrderNumber(orderNumber);
+        if (order == null) {
+            throw new ResourceException("Order with order number: " + orderNumber + " is not present", HttpStatus.NOT_FOUND);
+        }
         order.setOrderStatus(orderDto.getOrderStatus());
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
@@ -249,7 +255,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public OrderDto updateOrderStatusToShipping(String orderNumber, OrderDto orderDto) {
-        var order = orderRepository.findOrderByOrderNumber(orderNumber);
+        Order order = orderRepository.findOrderByOrderNumber(orderNumber);
         if (order == null) {
             throw new ResourceException("Order with order number: " + orderNumber + " is not present", HttpStatus.NOT_FOUND);
         }
