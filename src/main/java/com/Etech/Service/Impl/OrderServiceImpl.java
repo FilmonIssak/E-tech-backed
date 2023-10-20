@@ -20,7 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -45,35 +47,35 @@ public class OrderServiceImpl implements OrderService {
         return modelMapper.map(toGet, OrderDto.class);
     }
 
-              @Override
-              public OrderDto cancelOrderByOrderId(long id) {
+    @Override
+    public OrderDto cancelOrderByOrderId(long id) {
 
-                  Order order= orderRepo.findById(id).orElseThrow(()->new ResourceException("No order exists with given OrderId "+ id));
-                  if(order.getOrderStatus()== OrderStatus.PENDING) {
-                      order.setOrderStatus(OrderStatus.CANCELLED);
-                      orderRepo.save(order);
-                      return modelMapper.map(order, OrderDto.class);
-                  }
-                  else if(order.getOrderStatus()==OrderStatus.COMPLETED) {
-                      order.setOrderStatus(OrderStatus.CANCELLED);
-                      List<Product> productsInCartList= order.getProductCartItems();
+        Order order= orderRepo.findById(id).orElseThrow(()->new ResourceException("No order exists with given OrderId "+ id));
+        if(order.getOrderStatus()== OrderStatus.PENDING) {
+            order.setOrderStatus(OrderStatus.CANCELLED);
+            orderRepo.save(order);
+            return modelMapper.map(order, OrderDto.class);
+        }
+        else if(order.getOrderStatus()==OrderStatus.COMPLETED) {
+            order.setOrderStatus(OrderStatus.CANCELLED);
+            List<Product> productsInCartList= order.getProductCartItems();
 
-                      for(Product p : productsInCartList ) {
-                          Integer addedQuantity = p.getQuantity()+ 1;
-                          p.setQuantity(addedQuantity);
-                          if(p.getProductStatus() == ProductStatus.OUTOFSTOCK) {
-                              p.setProductStatus(ProductStatus.AVAILABLE);
-                          }
-                      }
+            for(Product p : productsInCartList ) {
+                Integer addedQuantity = p.getQuantity()+ 1;
+                p.setQuantity(addedQuantity);
+                if(p.getProductStatus() == ProductStatus.OUTOFSTOCK) {
+                    p.setProductStatus(ProductStatus.AVAILABLE);
+                }
+            }
 
-                      orderRepo.save(order);
-                      return modelMapper.map(order, OrderDto.class);
-                  }
-                  else {
-                      throw new ResourceException("Order was already cancelled");
-                  }
+            orderRepo.save(order);
+            return modelMapper.map(order, OrderDto.class);
+        }
+        else {
+            throw new ResourceException("Order was already cancelled");
+        }
 
-              }
+    }
 
     @Override
     public OrderDto placeOrder(Long customerId) {
@@ -90,15 +92,17 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = new Order();
         order.setOrderNumber(generateUniqueOrderNumber(customerId));
+        order.setOrderDate(LocalDate.from(LocalDateTime.now()));
+        order.setOrderTime(LocalTime.from(LocalDateTime.now()));
+        order.setOrderTotal(customerCart.getTotalPrice());
         order.setOrderStatus(OrderStatus.PENDING);
         order.setCustomer(customer);
-
         orderRepo.save(order);
 
         for (Map.Entry<Product, Integer> entry : customerCart.getProducts().entrySet()) {
             Product product = entry.getKey();
             int quantity = entry.getValue();
-            product.deductQuantity(quantity); 
+            product.deductQuantity(quantity);
         }
 
         customerCart.getProducts().clear();
@@ -106,6 +110,7 @@ public class OrderServiceImpl implements OrderService {
 
         customerRepo.save(customer);
         productRepo.saveAll(customerCart.getProducts().keySet());
+        System.out.println("OrderTime (before returning): " + order.getOrderTime());
 
         return modelMapper.map(order, OrderDto.class);
     }

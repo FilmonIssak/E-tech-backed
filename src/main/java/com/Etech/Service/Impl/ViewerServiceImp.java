@@ -31,6 +31,8 @@ public class ViewerServiceImp implements ViewerService {
     @Autowired
     private ViewerRepo viewerRepo;
     @Autowired
+    private CartRepo cartRepo;
+    @Autowired
     private ModelMapper modelMapper;
 
 
@@ -115,4 +117,38 @@ public class ViewerServiceImp implements ViewerService {
         return modelMapper.map(savedViewer, ViewerDto.class);
     }
 
+    @Override
+    public CartDto addProductToViewerCart(Long viewerId, Long productId, int quantity) {
+        if (viewerId == null || productId == null) {
+            throw new IllegalArgumentException("ViewerId or ProductId cannot be null!");
+        }
+        Viewer viewer = viewerRepo.findById(viewerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Viewer not found"));
+        Product product = productRepo.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+        Cart viewerCart = viewer.getCart();
+        if (viewerCart == null) {
+            viewerCart = new Cart();
+            viewer.setCart(viewerCart);
+            viewerCart.setViewer(viewer);
+        }
+
+        viewerCart.addProduct(product, quantity); // Adjusted to accommodate quantity
+
+        viewerRepo.save(viewer);
+        viewerCart = viewer.getCart(); // Refresh the viewerCart object after saving
+        return modelMapper.map(viewerCart, CartDto.class);
+    }
+
+    @Override
+    public CartDto deleteProductFromCartForViewer(Long viewerId, Long productId) {
+        Viewer viewer = viewerRepo.findById(viewerId).orElseThrow(() -> new ResourceException("Viewer not found"));
+        Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceException("Product not found"));
+        Cart viewerCart = viewer.getCart();
+        viewerCart.removeProduct(product);
+        viewerCart.updateTotalPrice();
+        cartRepo.save(viewerCart);
+        return modelMapper.map(viewerCart, CartDto.class);
+    }
 }

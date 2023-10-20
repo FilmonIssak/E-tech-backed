@@ -32,6 +32,9 @@ public class Cart {
     @OneToOne(cascade = CascadeType.ALL)
     private Customer customer;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Viewer viewer;
+
     public void addProduct(Product product, int quantity) {
         products.merge(product, quantity, Integer::sum);
         updateTotalPrice();

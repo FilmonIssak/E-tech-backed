@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
@@ -22,8 +24,10 @@ public class Order {
     @GeneratedValue
     private Long id;
     private String orderNumber;
-    private Date orderDate;
+    private LocalDate orderDate;
+    private LocalTime orderTime;
     private Double orderTotal;
+
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;

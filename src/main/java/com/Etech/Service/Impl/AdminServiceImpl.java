@@ -231,7 +231,7 @@ public class AdminServiceImpl implements AdminService {
         if (order == null) {
             throw new ResourceException("Order with order number: " + orderNumber + " is not present", HttpStatus.NOT_FOUND);
         }
-        order.setOrderStatus(orderDto.getOrderStatus());
+        order.setOrderStatus(OrderStatus.PENDING);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
@@ -248,7 +248,7 @@ public class AdminServiceImpl implements AdminService {
         if (order == null) {
             throw new ResourceException("Order with order number: " + orderNumber + " is not present", HttpStatus.NOT_FOUND);
         }
-        order.setOrderStatus(orderDto.getOrderStatus());
+        order.setOrderStatus(OrderStatus.DELIVERED);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
@@ -259,7 +259,7 @@ public class AdminServiceImpl implements AdminService {
         if (order == null) {
             throw new ResourceException("Order with order number: " + orderNumber + " is not present", HttpStatus.NOT_FOUND);
         }
-        order.setOrderStatus(orderDto.getOrderStatus());
+        order.setOrderStatus(OrderStatus.SHIPPED);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }
