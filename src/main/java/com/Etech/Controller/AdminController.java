@@ -116,19 +116,19 @@ public class AdminController {
     ////////////////////////
 
 
-    @PatchMapping("orders/{id}/processing")
-    public ResponseEntity<?> updateOrderStatusToProcessing(@PathVariable Long id, @RequestBody OrderDto orderDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToProcessing(id, orderDto));
+    @PatchMapping("orders/{orderNumber}/processing")
+    public ResponseEntity<?> updateOrderStatusToProcessing(@PathVariable String orderNumber, OrderDto orderDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToProcessing(orderNumber, orderDto));
     }
 
-    @PatchMapping("orders/{id}/delivery")
-    public ResponseEntity<?> updateOrderStatusToDelivery(@PathVariable Long id, @RequestBody OrderDto orderDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToDelivery(id, orderDto));
+    @PatchMapping("orders/{orderNumber}/delivery")
+    public ResponseEntity<?> updateOrderStatusToDelivery(@PathVariable String orderNumber, OrderDto orderDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToDelivery(orderNumber, orderDto));
     }
 
-    @PatchMapping("orders/{id}/shipping")
-    public ResponseEntity<?> updateOrderStatusToShipping(@PathVariable Long id, @RequestBody OrderDto orderDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToShipping(id, orderDto));
+    @PatchMapping("orders/{orderNumber}/shipping")
+    public ResponseEntity<?> updateOrderStatusToShipping(@PathVariable String orderNumber,OrderDto orderDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToShipping(orderNumber, orderDto));
     }
 
     @DeleteMapping("orders/{id}")
@@ -138,8 +138,5 @@ public class AdminController {
     }
 
 
-    @PostMapping("customers/{customerId}/orders")
-    public ResponseEntity<?> placeOrder(@PathVariable Long customerId, @RequestBody OrderDto orderDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.placeOrder(customerId, orderDto));
-    }
+
 }

@@ -2,6 +2,8 @@ package com.Etech.Repository;
 
 import com.Etech.Model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,6 +13,9 @@ public interface OrderRepo extends JpaRepository<Order,Long> {
 
     public List<Order> findOrderByOrderDate(String localDate);
 
-//      @Query("SELECT c from Customer c where c.id = customerid")
-//     public Customer findCustomerByOrderId(@Param("customerId") Long id);
+
+    public Order findOrderByOrderNumber(String orderNumber);
+        @Query("SELECT o FROM Order o WHERE o.orderNumber = :orderNumber AND o.customer.id = :customerId")
+        Order findOrderByOrderNumberAndCustomerId(@Param("orderNumber") String orderNumber, @Param("customerId") Long customerId);
+
 }

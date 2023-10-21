@@ -13,15 +13,14 @@ public interface ViewerService {
 
     ProductDto findProductByName(String name);
     List<ProductDto> getAllProducts();
-    List<ProductDto> findAllByCatagory(String category);
+    List<ProductDto> findAllByCategory(String category);
 
     List<ProductDto> findAllByKeyWord(String keyWord);
 
-//    List<ProductDto> filterProducts(String name, String category, String keyWord);
+//    findAllByCategory
     public ViewerDto register(ViewerDto viewerDto);
+
     public CartDto addProductToViewerCart(Long viewerId, Long productId, int quantity);
-//    public CartDto addProductToCartForViewer(Long viewerId, Long productId);
 
     public CartDto deleteProductFromCartForViewer(Long viewerId, Long productId);
-
 }

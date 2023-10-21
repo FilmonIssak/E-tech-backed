@@ -1,5 +1,13 @@
 package com.Etech.Model.enums;
 
 public enum OrderStatus {
-    PENDING,SUCCESS, CANCELED,SHIPPED;
+    PENDING,
+    CONFIRMED,
+    SHIPPED,
+    CANCELLED,
+    DELIVERED,
+    RETURNED,
+    REFUNDED,
+    EXCHANGED,
+    COMPLETED
 }

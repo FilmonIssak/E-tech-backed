@@ -14,6 +14,6 @@ public class CartDto {
     private Long id;
     private double totalPrice;
     private List<ProductQuantityDto> productQuantities;
-//    private Long customerId;
-    private Long viewerId;
+    private Long customerId;
+
 }

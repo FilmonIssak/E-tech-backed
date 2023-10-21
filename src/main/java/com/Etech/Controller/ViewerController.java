@@ -36,7 +36,7 @@ public class ViewerController {
 
     @GetMapping("products/searchByCategory/{category}")
     public ResponseEntity<List<ProductDto>> findProductsByCategory(@PathVariable("category") String category) {
-        return ResponseEntity.status(HttpStatus.OK).body(viewerService.findAllByCatagory(category));
+        return ResponseEntity.status(HttpStatus.OK).body(viewerService.findAllByCategory(category));
     }
 
     @GetMapping("products/searchByKeyword/{keyword}")
