@@ -16,6 +16,7 @@ import com.Etech.Service.ViewerService;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -134,6 +135,9 @@ public class ViewerServiceImp implements ViewerService {
             viewerCart.setViewer(viewer);
         }
 
+        if(quantity> product.getQuantity()){
+            throw new ResourceException("Not Enough quantity we only have "  + product.getQuantity() + " - "+ product.getName() + " In our Stock" , HttpStatus.CONFLICT);
+        }
         viewerCart.addProduct(product, quantity); // Adjusted to accommodate quantity
 
         viewerRepo.save(viewer);

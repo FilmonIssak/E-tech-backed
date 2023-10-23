@@ -2,13 +2,17 @@ package com.Etech.Service.Impl;
 
 import com.Etech.Dto.CartDto;
 import com.Etech.Dto.CustomerDto;
+import com.Etech.Dto.CustomerRegistrationDTO;
 import com.Etech.Dto.ProductDto;
+import com.Etech.Event.sender.CustomerRegisteredEvent;
 import com.Etech.Exception.ResourceException;
 import com.Etech.Model.*;
 import com.Etech.Repository.CartRepo;
 import com.Etech.Repository.CustomerRepo;
 import com.Etech.Repository.ProductRepo;
 import com.Etech.Service.CustomerService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +38,25 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private CustomerRegisteredEvent customerRegisteredEvent;
+
     @Override
     public CustomerDto register(CustomerDto customerDto) {
         Customer customer = modelMapper.map(customerDto, Customer.class);
         customerRepo.save(customer);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            CustomerRegistrationDTO messageDTO = modelMapper.map(customerDto, CustomerRegistrationDTO.class);
+            // map messageDTO to String
+            String memberMessage = objectMapper.writeValueAsString(messageDTO);
+            customerRegisteredEvent.sendCustomerRegisteredEvent(memberMessage);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
         return modelMapper.map(customer, CustomerDto.class);
     }
 
