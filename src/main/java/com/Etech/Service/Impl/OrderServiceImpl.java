@@ -1,6 +1,11 @@
 package com.Etech.Service.Impl;
 
+import com.Etech.Dto.CustomerRegistrationDTO;
+import com.Etech.Dto.OrderCancelationDto;
 import com.Etech.Dto.OrderDto;
+import com.Etech.Dto.OrderPlacedDto;
+import com.Etech.Event.sender.OrderCanceledEvent;
+import com.Etech.Event.sender.OrderPlacedEvent;
 import com.Etech.Exception.ResourceException;
 import com.Etech.Model.Cart;
 import com.Etech.Model.Customer;
@@ -14,6 +19,9 @@ import com.Etech.Repository.CustomerRepo;
 import com.Etech.Repository.OrderRepo;
 import com.Etech.Repository.ProductRepo;
 import com.Etech.Service.OrderService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +45,13 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ProductRepo productRepo;
     @Autowired
-    CustomerRepo customerRepo;
+    private CustomerRepo customerRepo;
+
+    @Autowired
+    private OrderPlacedEvent orderPlacedEvent;
+
+    @Autowired
+    private OrderCanceledEvent orderCanceledEvent;
 
 
     @Override
@@ -76,20 +90,27 @@ public class OrderServiceImpl implements OrderService {
 
         @Override
         public OrderDto cancelOrderByOrderId(long id) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
         Order order= orderRepo.findById(id).orElseThrow(()->new ResourceException("No order exists with given OrderId "+ id));
-        if(order.getOrderStatus()== OrderStatus.PENDING) {
+         if(order.getOrderStatus()==OrderStatus.COMPLETED || order.getOrderStatus()== OrderStatus.PENDING) {
             order.setOrderStatus(OrderStatus.CANCELLED);
-            orderRepo.save(order);
-            return modelMapper.map(order, OrderDto.class);
-        }
-        else if(order.getOrderStatus()==OrderStatus.COMPLETED) {
-            order.setOrderStatus(OrderStatus.CANCELLED);
+            try {
+                OrderCancelationDto messageDTO = modelMapper.map(order, OrderCancelationDto.class);
+                // map messageDTO to String
+                String memberMessage = objectMapper.writeValueAsString(messageDTO);
+                orderCanceledEvent.sendOrderCanceledEvent(memberMessage);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
             List<Product> productsInCartList= order.getProductCartItems();
 
+
             for(Product p : productsInCartList ) {
-                Integer addedQuantity = p.getQuantity()+ 1;
+                int deductedQuantity = p.getQuantity();
+                Integer addedQuantity = p.getQuantity()+ deductedQuantity;
                 p.setQuantity(addedQuantity);
-                if(p.getProductStatus() == ProductStatus.OUTOFSTOCK) {
+                if(addedQuantity > 0 && p.getProductStatus() == ProductStatus.OUTOFSTOCK) {
                     p.setProductStatus(ProductStatus.AVAILABLE);
                 }
             }
@@ -102,6 +123,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
     }
+
 
     @Override
     public OrderDto placeOrder(Long customerId) {
@@ -125,6 +147,17 @@ public class OrderServiceImpl implements OrderService {
         order.setCustomer(customer);
         orderRepo.save(order);
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        try {
+            OrderPlacedDto messageDTO = modelMapper.map(order, OrderPlacedDto.class);
+            // map messageDTO to String
+            String memberMessage = objectMapper.writeValueAsString(messageDTO);
+            orderPlacedEvent.sendOrderPlacedEvent(memberMessage);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
         for (Map.Entry<Product, Integer> entry : customerCart.getProducts().entrySet()) {
             Product product = entry.getKey();
             int quantity = entry.getValue();
@@ -137,6 +170,7 @@ public class OrderServiceImpl implements OrderService {
         customerRepo.save(customer);
         productRepo.saveAll(customerCart.getProducts().keySet());
         System.out.println("OrderTime (before returning): " + order.getOrderTime());
+
 
         return modelMapper.map(order, OrderDto.class);
     }

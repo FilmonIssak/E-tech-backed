@@ -5,10 +5,12 @@ import com.Etech.Dto.OrderDto;
 import com.Etech.Dto.ProductDto;
 import com.Etech.Service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -108,7 +110,7 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.getAllOrders());
     }
     @GetMapping("orders/date/{date}")
-    public ResponseEntity<List<?>> getOrdersByDate(@PathVariable String date) {
+    public ResponseEntity<List<?>> getOrdersByDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.getAllOrdersByDate(date));
     }
 

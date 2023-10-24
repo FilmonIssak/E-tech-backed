@@ -5,6 +5,7 @@ import com.Etech.Dto.CustomerDto;
 import com.Etech.Dto.OrderDto;
 import com.Etech.Dto.ProductDto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface AdminService {
@@ -33,7 +34,7 @@ public interface AdminService {
     /** Order $*/
     public OrderDto updateOrderStatusToProcessing(String orderNumber, OrderDto orderDto);
 
-    public List<OrderDto> getAllOrdersByDate(String orderDate);
+    public List<OrderDto> getAllOrdersByDate(LocalDate orderDate);
 
     public List<OrderDto> getAllOrders();
 
