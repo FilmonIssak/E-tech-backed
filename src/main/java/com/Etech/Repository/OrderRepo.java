@@ -6,12 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface OrderRepo extends JpaRepository<Order,Long> {
 
-    public List<Order> findOrderByOrderDate(String localDate);
+    public List<Order> findOrderByOrderDate(LocalDate localDate);
 
 
     public Order findOrderByOrderNumber(String orderNumber);
