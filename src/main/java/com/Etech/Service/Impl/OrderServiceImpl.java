@@ -51,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderCanceledEvent orderCanceledEvent;
+
     @Autowired
     private PaypalService paypalService;
 
@@ -94,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
             objectMapper.registerModule(new JavaTimeModule());
         Order order= orderRepo.findOrderByOrderNumber(orderNumber);
         if(order == null){ throw new ResourceException("No order exists with given orderNumber "+ orderNumber);}
-         if(order.getOrderStatus()==OrderStatus.SHIPPED || order.getOrderStatus()== OrderStatus.PENDING || order.getOrderStatus()== OrderStatus.DELIVERED) {
+         if(order.getOrderStatus()== OrderStatus.PENDING) {
             order.setOrderStatus(OrderStatus.CANCELLED);
             try {
                 OrderCancelationDto messageDTO = modelMapper.map(order, OrderCancelationDto.class);
@@ -124,7 +125,6 @@ public class OrderServiceImpl implements OrderService {
         }
 
     }
-
 
     @Override
     public OrderDto placeOrder(Long customerId) {
