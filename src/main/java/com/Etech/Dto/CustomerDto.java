@@ -27,8 +27,6 @@ public class CustomerDto {
     private CustomerStatus customerStatus;
 //    private Role role;
 
-    private CreditCard creditCard;
-
 //    private List<Address> addresses;
 
 

@@ -29,7 +29,7 @@ public class OrderCancelationListener {
             String body = "<p>Welcome to E-tech online Shopping System<p>\n" +
                     "</b> Your Order Cancellation Details are as Follows</p>\n" +
                     "<p>Canceled Order Number: <b>" + messageUserDetails.getOrderNumber() + "</b><br/>\n" +
-                    "Total Amount of : <b>" + messageUserDetails.getOrderTotal() + "$"+ " Refunded" +"</b></p>"+
+                    "Total Amount of : <b>" + messageUserDetails.getOrderTotal() + "$"+ " Will be Refunded" +"</b></p>"+
                     "Order Date Was on: <b>" + messageUserDetails.getOrderDate() + "</b></p>"+
                     "<p>Thank you for choosing E-tech online Shopping System <p>\n" +
                     "<p>etechonlineshopping2023@gmail.com  <p>\n";

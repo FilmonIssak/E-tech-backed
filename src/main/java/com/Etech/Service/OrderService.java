@@ -2,21 +2,21 @@ package com.Etech.Service;
 
 import com.Etech.Dto.CustomerDto;
 import com.Etech.Dto.OrderDto;
-import com.Etech.Dto.ProductDto;
+import com.Etech.Dto.OrderDtoWithOutDetails;
+import com.Etech.Model.Cart;
 import com.Etech.Model.enums.OrderStatus;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.math.BigDecimal;
 
 public interface OrderService {
 
-    public OrderDto findOrderById(long id);
+    public OrderDtoWithOutDetails findOrderById(long id);
 
-    public OrderDto cancelOrderByOrderId(long id);
+    public OrderDto cancelOrderByOrderNumber(String orderNumber);
 
     public OrderDto placeOrder(Long customerId);
 
-
+    public BigDecimal calculateOrderTotal(Cart cart);
     public OrderStatus checkOrderStatus(String orderNumber);
 
 }

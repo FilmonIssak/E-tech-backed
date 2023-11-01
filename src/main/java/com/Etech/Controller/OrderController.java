@@ -20,9 +20,9 @@ public class OrderController {
     public ResponseEntity<?> findProductById(@PathVariable("id") long id) {
         return ResponseEntity.status(HttpStatus.OK).body(orderService.findOrderById(id));
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> cancelTheOrderByOrderId (@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.cancelOrderByOrderId(id));
+    @DeleteMapping("/{orderNumber}/cancel")
+    public ResponseEntity<?> cancelTheOrderByOrderNumber (@PathVariable String orderNumber){
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.cancelOrderByOrderNumber(orderNumber));
     }
 
 }
