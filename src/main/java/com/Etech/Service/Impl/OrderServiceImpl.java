@@ -1,9 +1,6 @@
 package com.Etech.Service.Impl;
 
-import com.Etech.Dto.CustomerRegistrationDTO;
-import com.Etech.Dto.OrderCancelationDto;
-import com.Etech.Dto.OrderDto;
-import com.Etech.Dto.OrderPlacedDto;
+import com.Etech.Dto.*;
 import com.Etech.Event.sender.OrderCanceledEvent;
 import com.Etech.Event.sender.OrderPlacedEvent;
 import com.Etech.Exception.ResourceException;
@@ -27,6 +24,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -53,11 +52,13 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderCanceledEvent orderCanceledEvent;
 
+    @Autowired
+    private PaypalService paypalService;
 
     @Override
-    public OrderDto findOrderById(long id) {
+    public OrderDtoWithOutDetails findOrderById(long id) {
         Order toGet = orderRepo.findById(id).orElseThrow(() -> new ResourceException("Order with order id: " + id + " is not present"));
-        return modelMapper.map(toGet, OrderDto.class);
+        return modelMapper.map(toGet, OrderDtoWithOutDetails.class);
     }
 
 
@@ -89,11 +90,12 @@ public class OrderServiceImpl implements OrderService {
 
 
         @Override
-        public OrderDto cancelOrderByOrderId(long id) {
+        public OrderDto cancelOrderByOrderNumber(String orderNumber) {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
-        Order order= orderRepo.findById(id).orElseThrow(()->new ResourceException("No order exists with given OrderId "+ id));
-         if(order.getOrderStatus()==OrderStatus.COMPLETED || order.getOrderStatus()== OrderStatus.PENDING) {
+        Order order= orderRepo.findOrderByOrderNumber(orderNumber);
+        if(order == null){ throw new ResourceException("No order exists with given orderNumber "+ orderNumber);}
+         if(order.getOrderStatus()== OrderStatus.PENDING) {
             order.setOrderStatus(OrderStatus.CANCELLED);
             try {
                 OrderCancelationDto messageDTO = modelMapper.map(order, OrderCancelationDto.class);
@@ -124,7 +126,6 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-
     @Override
     public OrderDto placeOrder(Long customerId) {
         if (customerId == null) {
@@ -137,6 +138,13 @@ public class OrderServiceImpl implements OrderService {
         if (customerCart == null || customerCart.getProducts().isEmpty()) {
             throw new IllegalStateException("The cart is empty. Cannot place an order with an empty cart.");
         }
+
+//        BigDecimal orderTotal = calculateOrderTotal(customerCart);
+//
+//        if (customer.getAccountBalance().compareTo(orderTotal) < 0) {
+//            throw new IllegalStateException("Insufficient funds to place the order.");
+//        }
+
 
         Order order = new Order();
         order.setOrderNumber(generateUniqueOrderNumber(customerId));
@@ -175,10 +183,11 @@ public class OrderServiceImpl implements OrderService {
         return modelMapper.map(order, OrderDto.class);
     }
 
-
-
-
-
+    @Override
+    public BigDecimal calculateOrderTotal(Cart cart) {
+        double totalPrice = cart.getTotalPrice();
+        return BigDecimal.valueOf(totalPrice);
+    }
 
 
     private String generateUniqueOrderNumber(Long customerId) {

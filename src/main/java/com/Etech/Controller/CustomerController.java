@@ -37,6 +37,10 @@ public class CustomerController {
     public ResponseEntity<?> getAllProducts() {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll());
     }
+    @GetMapping("{id}/cart")
+    public ResponseEntity<?> findProductInCartById(@PathVariable("id") long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(cartService.findCartProductsById(id));
+    }
 
     @PostMapping(value = "register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDto> registerCustomer(@RequestBody CustomerDto customerDto) {
@@ -50,8 +54,8 @@ public class CustomerController {
 
 
     @PostMapping("{customerId}/cart")
-    public ResponseEntity<CartDto> addToCart(@PathVariable Long customerId, @RequestBody ProductDto productDto) {
-        CartDto updatedCart = customerService.addProductToViewerCart(customerId, productDto.getId(), productDto.getQuantity());
+    public ResponseEntity<CartDto> addProductToCustomerCart(@PathVariable Long customerId, @RequestBody ProductDto productDto) {
+        CartDto updatedCart = customerService.addProductToCustomerCart(customerId, productDto.getId(), productDto.getQuantity());
         return ResponseEntity.status(HttpStatus.OK).body(updatedCart);
     }
 

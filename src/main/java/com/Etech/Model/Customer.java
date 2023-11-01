@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,6 +45,5 @@ public class Customer {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
-
 
 }

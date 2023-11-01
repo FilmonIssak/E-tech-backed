@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -183,7 +182,7 @@ public class AdminServiceImpl implements AdminService {
         toBeUpdated.setPhone(customerDto.getPhone());
         toBeUpdated.setEmail(customerDto.getEmail());
         toBeUpdated.setCustomerStatus(customerDto.getCustomerStatus());
-        toBeUpdated.setCreditCard(customerDto.getCreditCard());
+        //toBeUpdated.setCreditCard(customerDto.getCreditCard());
         customerRepo.save(toBeUpdated);
         return modelMapper.map(toBeUpdated, CustomerDto.class);
     }
@@ -236,12 +235,12 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public OrderDto updateOrderStatusToProcessing(String orderNumber, OrderDto orderDto) {
+    public OrderDto updateOrderStatusToCompleted(String orderNumber, OrderDto orderDto) {
         Order order = orderRepository.findOrderByOrderNumber(orderNumber);
         if (order == null) {
             throw new ResourceException("Order with order number: " + orderNumber + " is not present", HttpStatus.NOT_FOUND);
         }
-        order.setOrderStatus(OrderStatus.PENDING);
+        order.setOrderStatus(OrderStatus.COMPLETED);
         orderRepository.save(order);
         return modelMapper.map(order, OrderDto.class);
     }

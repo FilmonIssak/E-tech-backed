@@ -15,7 +15,7 @@ public interface CustomerService {
     public CustomerDto register(CustomerDto customerDto);
 
     public List<ProductDto> findAll();
-    public CartDto addProductToViewerCart(Long viewerId, Long productId, int quantity);
+    public CartDto addProductToCustomerCart(Long viewerId, Long productId, int quantity);
 
     public CartDto deleteProductFromCustomerCart(Long customerId, Long productId);
 

@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface CartService {
     public List<CartDto> viewAllProductsInCart();
+    public CartDto findCartProductsById(long id);
 
 }

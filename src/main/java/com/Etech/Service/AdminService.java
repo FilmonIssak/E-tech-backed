@@ -32,7 +32,7 @@ public interface AdminService {
     public void deleteCustomer(Long id);
 
     /** Order $*/
-    public OrderDto updateOrderStatusToProcessing(String orderNumber, OrderDto orderDto);
+    public OrderDto updateOrderStatusToCompleted(String orderNumber, OrderDto orderDto);
 
     public List<OrderDto> getAllOrdersByDate(LocalDate orderDate);
 

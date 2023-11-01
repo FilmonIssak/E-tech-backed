@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,7 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
         return productList.stream().map(product -> modelMapper.map(product,ProductDto.class)).collect(Collectors.toList());
     }
     @Override
-    public CartDto addProductToViewerCart(Long customerId, Long productId, int quantity) {
+    public CartDto addProductToCustomerCart(Long customerId, Long productId, int quantity) {
         if (customerId == null || productId == null) {
             throw new IllegalArgumentException("customerId or ProductId cannot be null!");
         }
@@ -86,6 +87,9 @@ public class CustomerServiceImpl implements CustomerService {
             customerCart = new Cart();
             customer.setCart(customerCart);
             customerCart.setCustomer(customer);
+        }
+        if(quantity> product.getQuantity()){
+            throw new ResourceException("Not Enough quantity we only have "  + product.getQuantity() + " - "+ product.getName() + " In our Stock" , HttpStatus.CONFLICT);
         }
 
         customerCart.addProduct(product, quantity);

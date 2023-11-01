@@ -118,12 +118,12 @@ public class AdminController {
     //////////////////////////////////////////////////////
 
 
-    @PatchMapping("orders/{orderNumber}/processing")
+    @PatchMapping("orders/{orderNumber}/completed")
     public ResponseEntity<?> updateOrderStatusToProcessing(@PathVariable String orderNumber, OrderDto orderDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToProcessing(orderNumber, orderDto));
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToCompleted(orderNumber, orderDto));
     }
 
-    @PatchMapping("orders/{orderNumber}/delivery")
+    @PatchMapping("orders/{orderNumber}/delivered")
     public ResponseEntity<?> updateOrderStatusToDelivery(@PathVariable String orderNumber, OrderDto orderDto) {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToDelivery(orderNumber, orderDto));
     }
