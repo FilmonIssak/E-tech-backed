@@ -1,11 +1,16 @@
 package com.Etech.Service.Impl;
 
 import com.Etech.Dto.*;
+import com.Etech.Event.sender.OrderDeliveredEvent;
+import com.Etech.Event.sender.OrderShippedEvent;
 import com.Etech.Exception.ResourceException;
 import com.Etech.Model.*;
 import com.Etech.Model.enums.OrderStatus;
 import com.Etech.Repository.*;
 import com.Etech.Service.AdminService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,6 +41,12 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+    private OrderShippedEvent orderShippedEvent;
+
+    @Autowired
+    private OrderDeliveredEvent orderDeliveredEvent;
 
 
 
@@ -198,38 +209,15 @@ public class AdminServiceImpl implements AdminService {
     /** Order $ */
 
     @Override
-    public List<OrderDto> getAllOrdersByDate(LocalDate orderDate) {
+    public List<OrderDtoWithSpecificDetails> getAllOrdersByDate(LocalDate orderDate) {
         List<Order> listOfOrdersOntheDay = orderRepository.findOrderByOrderDate(orderDate);
-        return listOfOrdersOntheDay.stream().map(order -> modelMapper.map(order, OrderDto.class)).collect(Collectors.toList());
+        return listOfOrdersOntheDay.stream().map(order -> modelMapper.map(order, OrderDtoWithSpecificDetails.class)).collect(Collectors.toList());
     }
 
     @Override
-    public List<OrderDto> getAllOrders() {
+    public List<OrderDtoWithSpecificDetails> getAllOrders() {
         List<Order> orderList = orderRepository.findAll();
-
-        return orderList.stream().map(order -> {
-            OrderDto orderDto = new OrderDto();
-            orderDto.setId(order.getId());
-            orderDto.setOrderNumber(order.getOrderNumber());
-            orderDto.setOrderDate(order.getOrderDate());
-            orderDto.setOrderTotal(Double.valueOf(order.getOrderTotal()));
-            orderDto.setOrderTime(order.getOrderTime());
-            orderDto.setOrderStatus(order.getOrderStatus());
-
-            CustomerDto customerDto = new CustomerDto();
-            customerDto.setFirstName(order.getCustomer().getFirstName());
-            customerDto.setLastName(order.getCustomer().getLastName());
-            customerDto.setPhone(order.getCustomer().getPhone());
-            customerDto.setEmail(order.getCustomer().getEmail());
-            customerDto.setCustomerStatus(order.getCustomer().getCustomerStatus());
-            customerDto.setDateOfRegistration(order.getCustomer().getDateOfRegistration());
-            customerDto.setId(order.getCustomer().getId());
-
-
-            orderDto.setCustomer(customerDto);
-
-            return orderDto;
-        }).collect(Collectors.toList());
+        return orderList.stream().map(order -> modelMapper.map(order,OrderDtoWithSpecificDetails.class)).collect(Collectors.toList());
     }
 
 
@@ -246,9 +234,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deleteOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceException("Order to be deleted not found"));
-        orderRepository.delete(order);
+    public void deleteOrder(String orderNumber) {
+        Order toBeDeleted = orderRepository.findOrderByOrderNumber(orderNumber);
+        if(toBeDeleted == null){
+            throw new ResourceException("Order to be deleted not found");
+        }
+        orderRepository.delete(toBeDeleted);
     }
 
     @Override
@@ -259,6 +250,18 @@ public class AdminServiceImpl implements AdminService {
         }
         order.setOrderStatus(OrderStatus.DELIVERED);
         orderRepository.save(order);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        try {
+            OrderPlacedDto messageDTO = modelMapper.map(order, OrderPlacedDto.class);
+            // map messageDTO to String
+            String memberMessage = objectMapper.writeValueAsString(messageDTO);
+            orderDeliveredEvent.sendOrderDeliveredEvent(memberMessage);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
         return modelMapper.map(order, OrderDto.class);
     }
 
@@ -273,6 +276,18 @@ public class AdminServiceImpl implements AdminService {
 
         order.setOrderStatus(OrderStatus.SHIPPED);
         orderRepository.save(order);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        try {
+            OrderPlacedDto messageDTO = modelMapper.map(order, OrderPlacedDto.class);
+            // map messageDTO to String
+            String memberMessage = objectMapper.writeValueAsString(messageDTO);
+            orderShippedEvent.sendOrderShippedEvent(memberMessage);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
         return modelMapper.map(order, OrderDto.class);
     }
 

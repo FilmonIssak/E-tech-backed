@@ -133,9 +133,9 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.updateOrderStatusToShipping(orderNumber, orderDto));
     }
 
-    @DeleteMapping("orders/{id}")
-    public ResponseEntity<?> deleteOrder(@PathVariable Long id) {
-        adminService.deleteOrder(id);
+    @DeleteMapping("orders/{orderNumber}")
+    public ResponseEntity<?> deleteOrder(@PathVariable String orderNumber) {
+        adminService.deleteOrder(orderNumber);
         return ResponseEntity.status(HttpStatus.OK).body("Order successfully deleted");
     }
 

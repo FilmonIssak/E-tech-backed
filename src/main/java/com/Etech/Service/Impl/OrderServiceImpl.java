@@ -56,8 +56,11 @@ public class OrderServiceImpl implements OrderService {
     private PaypalService paypalService;
 
     @Override
-    public OrderDtoWithOutDetails findOrderById(long id) {
-        Order toGet = orderRepo.findById(id).orElseThrow(() -> new ResourceException("Order with order id: " + id + " is not present"));
+    public OrderDtoWithOutDetails findOrderByOrderNumber(String orderNumber) {
+        Order toGet = orderRepo.findOrderByOrderNumber(orderNumber);
+         if (toGet == null) {
+            throw new ResourceException("Order with order number: " + orderNumber + " is not present");
+        }
         return modelMapper.map(toGet, OrderDtoWithOutDetails.class);
     }
 
@@ -121,7 +124,7 @@ public class OrderServiceImpl implements OrderService {
             return modelMapper.map(order, OrderDto.class);
         }
         else {
-            throw new ResourceException("Order was already cancelled");
+            throw new ResourceException("Sorry Order is already : " + order.getOrderStatus());
         }
 
     }
@@ -170,10 +173,16 @@ public class OrderServiceImpl implements OrderService {
             Product product = entry.getKey();
             int quantity = entry.getValue();
             product.deductQuantity(quantity);
+            if(product.getQuantity() == 0){
+                product.setProductStatus(ProductStatus.OUTOFSTOCK);
+            }
         }
+
+        productRepo.saveAll(customerCart.getProducts().keySet());
 
         customerCart.getProducts().clear();
         customerCart.setTotalPrice(0);
+
 
         customerRepo.save(customer);
         productRepo.saveAll(customerCart.getProducts().keySet());

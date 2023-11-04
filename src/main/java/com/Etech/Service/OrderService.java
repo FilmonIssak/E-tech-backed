@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 public interface OrderService {
 
-    public OrderDtoWithOutDetails findOrderById(long id);
+    public OrderDtoWithOutDetails findOrderByOrderNumber(String orderNumber);
 
     public OrderDto cancelOrderByOrderNumber(String orderNumber);
 

@@ -16,9 +16,9 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> findProductById(@PathVariable("id") long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.findOrderById(id));
+    @GetMapping("/{orderNumber}")
+    public ResponseEntity<?> findProductById(@PathVariable String orderNumber) {
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.findOrderByOrderNumber(orderNumber));
     }
     @DeleteMapping("/{orderNumber}/cancel")
     public ResponseEntity<?> cancelTheOrderByOrderNumber (@PathVariable String orderNumber){

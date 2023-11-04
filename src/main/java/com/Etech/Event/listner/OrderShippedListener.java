@@ -1,9 +1,8 @@
 package com.Etech.Event.listner;
 
-import com.Etech.Dto.CustomerRegistrationDTO;
 import com.Etech.Dto.OrderPlacedDto;
+import com.Etech.Dto.OrderShippedDto;
 import com.Etech.Model.Email;
-import com.Etech.Model.Product;
 import com.Etech.Service.EmailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -13,25 +12,24 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OrderPlacementListener {
+public class OrderShippedListener {
 
     @Autowired
     private EmailService emailService;
 
-    @KafkaListener(topics = {"order-placed"})
-    public void listenWhenOrderPlaced(@Payload String memberDTO) {
+    @KafkaListener(topics = {"order-shipped"})
+    public void listenWhenOrderShipped(@Payload String memberDTO) {
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         try {
-            System.out.println("Received new Order details ....");
+            System.out.println("Received new Order Updates ....");
             OrderPlacedDto messageUserDetails = objectMapper.readValue(memberDTO, OrderPlacedDto.class);
 
             String body = "<p>Welcome to E-tech online Shopping System<p>\n" +
-                    "</b>  You have successfully placed an order</p>\n" +
-                    "</b> Your Order Details are as Follows</p>\n" +
+                    "</b> Your Order Shipment status are as Follows</p>\n" +
                     "<p>Order Number: <b>" + messageUserDetails.getOrderNumber() + "</b><br/>\n" +
-                    "Total Amount: <b>" + messageUserDetails.getOrderTotal() + "$"+ "</b></p>"+
+                    "Order Status is: <b>" + messageUserDetails.getOrderStatus() + "</b></p>"+
                     "Order Date: <b>" + messageUserDetails.getOrderDate() + "</b></p>"+
                     "<p>Thank you for choosing E-tech online Shopping System <p>\n" +
                     "<p>etechonlineshopping2023@gmail.com  <p>\n";
