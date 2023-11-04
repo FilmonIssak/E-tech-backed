@@ -91,6 +91,9 @@ public class CustomerServiceImpl implements CustomerService {
         if(quantity> product.getQuantity()){
             throw new ResourceException("Not Enough quantity we only have "  + product.getQuantity() + " - "+ product.getName() + " In our Stock" , HttpStatus.CONFLICT);
         }
+        if (quantity < 0) {
+            throw new ResourceException("Product quantity cannot be negative");
+        }
 
         customerCart.addProduct(product, quantity);
 

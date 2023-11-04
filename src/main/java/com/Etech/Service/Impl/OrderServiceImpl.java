@@ -64,7 +64,6 @@ public class OrderServiceImpl implements OrderService {
         return modelMapper.map(toGet, OrderDtoWithOutDetails.class);
     }
 
-
 //    @Override
 //    public OrderDto addOrder(OrderDto orderDto) {
 //        Long orderId = orderDto.getId();
@@ -120,6 +119,7 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
 
+            productRepo.saveAll(productsInCartList);
             orderRepo.save(order);
             return modelMapper.map(order, OrderDto.class);
         }
@@ -141,6 +141,7 @@ public class OrderServiceImpl implements OrderService {
         if (customerCart == null || customerCart.getProducts().isEmpty()) {
             throw new IllegalStateException("The cart is empty. Cannot place an order with an empty cart.");
         }
+
 
 //        BigDecimal orderTotal = calculateOrderTotal(customerCart);
 //
@@ -172,9 +173,10 @@ public class OrderServiceImpl implements OrderService {
         for (Map.Entry<Product, Integer> entry : customerCart.getProducts().entrySet()) {
             Product product = entry.getKey();
             int quantity = entry.getValue();
+
             product.deductQuantity(quantity);
-            if(product.getQuantity() == 0){
-                product.setProductStatus(ProductStatus.OUTOFSTOCK);
+            if(product.getQuantity()<0){
+                throw new ResourceException("Product quantity can not be negative");
             }
         }
 

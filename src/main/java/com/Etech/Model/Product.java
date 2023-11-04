@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 
 @Data
 @NoArgsConstructor
@@ -22,6 +23,7 @@ public class Product {
     private String name;
     private String description;
     private double price;
+    @Positive
     private int quantity;
     public void deductQuantity(int quantity) {
         this.quantity -= quantity;
