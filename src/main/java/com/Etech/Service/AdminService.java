@@ -1,9 +1,6 @@
 package com.Etech.Service;
 
-import com.Etech.Dto.CartDto;
-import com.Etech.Dto.CustomerDto;
-import com.Etech.Dto.OrderDto;
-import com.Etech.Dto.ProductDto;
+import com.Etech.Dto.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,11 +31,11 @@ public interface AdminService {
     /** Order $*/
     public OrderDto updateOrderStatusToCompleted(String orderNumber, OrderDto orderDto);
 
-    public List<OrderDto> getAllOrdersByDate(LocalDate orderDate);
+    public List<OrderDtoWithSpecificDetails> getAllOrdersByDate(LocalDate orderDate);
 
-    public List<OrderDto> getAllOrders();
+    public List<OrderDtoWithSpecificDetails> getAllOrders();
 
-    public void deleteOrder(Long orderId);
+    public void deleteOrder(String orderNumber);
 
     public OrderDto updateOrderStatusToDelivery(String orderNumber, OrderDto orderDto);
 
