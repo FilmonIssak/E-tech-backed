@@ -26,13 +26,67 @@ public class OrderCancelationListener {
             System.out.println("Received new Order cancellation details ....");
             OrderPlacedDto messageUserDetails = objectMapper.readValue(memberDTO, OrderPlacedDto.class);
 
-            String body = "<p>Welcome to E-tech online Shopping System<p>\n" +
-                    "</b> Your Order Cancellation Details are as Follows</p>\n" +
-                    "<p>Canceled Order Number: <b>" + messageUserDetails.getOrderNumber() + "</b><br/>\n" +
-                    "Total Amount of : <b>" + messageUserDetails.getOrderTotal() + "$"+ " Will be Refunded" +"</b></p>"+
-                    "Order Date Was on: <b>" + messageUserDetails.getOrderDate() + "</b></p>"+
-                    "<p>Thank you for choosing E-tech online Shopping System <p>\n" +
-                    "<p>etechonlineshopping2023@gmail.com  <p>\n";
+            String body = "<html>" +
+                    "<head>" +
+                    "<style>" +
+                    "body {" +
+                    "    font-family: Arial, sans-serif;" +
+                    "    background-color: #f4f4f4;" +
+                    "    text-align: center;" +
+                    "}" +
+                    ".container {" +
+                    "    max-width: 600px;" +
+                    "    margin: 0 auto;" +
+                    "    padding: 20px;" +
+                    "    background-color: #fff;" +
+                    "    border-radius: 5px;" +
+                    "    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);" +
+                    "}" +
+                    "h1 {" +
+                    "    color: #007bff;" +
+                    "}" +
+                    "ul {" +
+                    "    list-style-type: none;" +
+                    "}" +
+                    "li {" +
+                    "    color: #28a745;" +
+                    "}" +
+                    "a.button {" +
+                    "    background-color: #007bff;" +
+                    "    color: white;" +
+                    "    padding: 10px 20px;" +
+                    "    text-decoration: none;" +
+                    "    display: inline-block;" +
+                    "    border-radius: 5px;" +
+                    "    margin-right: 10px;" +
+                    "}" +
+                    "a.button:hover {" +
+                    "    background-color: #0056b3;" +
+                    "}" +
+                    ".black-text {" +
+                    "    color: black;" +
+                    "}" +
+                    ".red-text {" +
+                    "    color: red;" +
+                    "}" +
+                    "</style>" +
+                    "</head>" +
+                    "<body>" +
+                    "<div class='container'>" +
+                    "<h1>Welcome to E-tech Online Shopping System</h1>" +
+                    "<p>Your Order Cancellation Details are as follows:</p>" +
+                    "<ul>" +
+                    "    <li><strong class='black-text'>Canceled Order Number:</strong> <span class='red-text'>" + messageUserDetails.getOrderNumber() + "</span></li>" +
+                    "    <li><strong class='black-text'>Total Amount:</strong> <span class='red-text'>$" + messageUserDetails.getOrderTotal() + " will be refunded</span></li>" +
+                    "    <li><strong class='black-text'>Order Date:</strong> <span class='red-text'>" + messageUserDetails.getOrderDate() + "</span></li>" +
+                    "</ul>" +
+                    "<p>Thank you for choosing E-tech Online Shopping System</p>" +
+                    "<a href='mailto:etechonlineshopping2023@gmail.com' class='button'>Contact us via Email</a>" +
+                    "<a href='tel:641-456-3464' class='button'>Call us at 843-653-6506</a>" +
+                    "</div>" +
+                    "</body>" +
+                    "</html>";
+
 
             Email email = new Email(messageUserDetails.getCustomer().getEmail(), "Welcome to E-tech online Shopping System", body);
             emailService.sendWithHTMLBody(email);
